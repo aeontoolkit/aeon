@@ -46,19 +46,19 @@ def test_saving_loading_deep_learning_cls(deep_cls):
 
             X, y = make_example_3d_numpy()
 
-            deep_cls_train = deep_cls(
-                n_epochs=2,
-                save_best_model=True,
-                save_last_model=True,
-                save_init_model=True,
-                best_file_name=best_file_name,
-                last_file_name=last_file_name,
-                init_file_name=init_file_name,
-                file_path=tmp,
-            )
+            test_params = deep_cls.get_test_params()[0]
+            test_params["save_best_model"] = True
+            test_params["save_last_model"] = True
+            test_params["save_init_model"] = True
+            test_params["best_file_name"] = best_file_name
+            test_params["last_file_name"] = last_file_name
+            test_params["init_file_name"] = init_file_name
+            test_params["file_path"] = tmp
+
+            deep_cls_train = deep_cls(**test_params)
             deep_cls_train.fit(X, y)
 
-            deep_cls_best = deep_cls()
+            deep_cls_best = deep_cls(**test_params)
             deep_cls_best.load_model(
                 model_path=os.path.join(tmp, best_file_name + ".keras"),
                 classes=np.unique(y),
@@ -66,7 +66,7 @@ def test_saving_loading_deep_learning_cls(deep_cls):
             ypred_best = deep_cls_best.predict(X)
             assert len(ypred_best) == len(y)
 
-            deep_cls_last = deep_cls()
+            deep_cls_last = deep_cls(**test_params)
             deep_cls_last.load_model(
                 model_path=os.path.join(tmp, last_file_name + ".keras"),
                 classes=np.unique(y),
@@ -74,7 +74,7 @@ def test_saving_loading_deep_learning_cls(deep_cls):
             ypred_last = deep_cls_last.predict(X)
             assert len(ypred_last) == len(y)
 
-            deep_cls_init = deep_cls()
+            deep_cls_init = deep_cls(**test_params)
             deep_cls_init.load_model(
                 model_path=os.path.join(tmp, init_file_name + ".keras"),
                 classes=np.unique(y),

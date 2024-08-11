@@ -11,36 +11,40 @@ from aeon.utils.validation._dependencies import _check_soft_dependencies
 
 __maintainer__ = ["hadifawaz1999"]
 
+_deep_rgs_classes = [
+    member[1] for member in inspect.getmembers(deep_learning, inspect.isclass)
+]
+
 
 @pytest.mark.skipif(
     not _check_soft_dependencies(["tensorflow"], severity="none"),
     reason="skip test if required soft dependency not available",
 )
-def test_random_state_deep_learning_rgs():
+@pytest.mark.parametrize("deep_rgs", _deep_rgs_classes)
+def test_random_state_deep_learning_rgs(deep_rgs):
     """Test Deep Regressor seeding."""
-    random_state = 42
+    if not (
+        deep_rgs.__name__
+        in [
+            "BaseDeepRegressor",
+            "InceptionTimeRegressor",
+            "LITETimeRegressor",
+            "TapNetRegressor",
+        ]
+    ):
+        random_state = 42
 
-    X, y = make_example_3d_numpy(random_state=random_state)
+        X, y = make_example_3d_numpy(random_state=random_state)
 
-    deep_rgs_classes = [
-        member[1] for member in inspect.getmembers(deep_learning, inspect.isclass)
-    ]
+        test_params = deep_rgs.get_test_params()[0]
+        test_params["random_state"] = random_state
 
-    for i in range(len(deep_rgs_classes)):
-        if (
-            "BaseDeepRegressor" in str(deep_rgs_classes[i])
-            or "InceptionTimeRegressor" in str(deep_rgs_classes[i])
-            or "LITETimeRegressor" in str(deep_rgs_classes[i])
-            or "TapNetRegressor" in str(deep_rgs_classes[i])
-        ):
-            continue
-
-        deep_rgs1 = deep_rgs_classes[i](random_state=random_state, n_epochs=4)
+        deep_rgs1 = deep_rgs(**test_params)
         deep_rgs1.fit(X, y)
 
         layers1 = deep_rgs1.training_model_.layers[1:]
 
-        deep_rgs2 = deep_rgs_classes[i](random_state=random_state, n_epochs=4)
+        deep_rgs2 = deep_rgs(**test_params)
         deep_rgs2.fit(X, y)
 
         layers2 = deep_rgs2.training_model_.layers[1:]

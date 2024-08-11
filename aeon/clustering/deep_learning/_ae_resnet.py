@@ -40,7 +40,7 @@ class AEResNetClusterer(BaseDeepClusterer):
         The number of convolution filters for all the convolution layers in the same
         residual block, if not a list, the same number of filters is used in all
         convolutions of all residual blocks.
-    kernel_sizes : int or list of int, default = [8, 5, 3]
+    kernel_size : int or list of int, default = [8, 5, 3]
         The kernel size of all the convolution layers in one residual block, if not
         a list, the same kernel size is used in all convolution layers.
     strides : int or list of int, default = 1
@@ -352,12 +352,11 @@ class AEResNetClusterer(BaseDeepClusterer):
             "batch_size": 4,
             "n_residual_blocks": 1,
             "n_conv_per_residual_block": 1,
-            "clustering_params": {
-                "distance": "euclidean",
-                "averaging_method": "mean",
-                "n_init": 1,
-                "max_iter": 30,
-            },
+            "n_filters": 1,
+            "kernel_size": 2,
+            "use_bias": False,
+            "clustering_algorithm": "dummy",
+            "clustering_params": {"strategy": "random"},
         }
 
         test_params = [param]

@@ -364,11 +364,16 @@ class InceptionTimeClassifier(BaseClassifier):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param1 = {
-            "n_classifiers": 1,
-            "n_epochs": 10,
+            "n_classifiers": 2,
+            "n_epochs": 2,
             "batch_size": 4,
-            "kernel_size": 4,
+            "depth": 1,
+            "kernel_size": 2,
+            "n_filters": 1,
+            "n_conv_per_layer": 1,
             "use_residual": False,
+            "use_bottleneck": False,
+            "use_max_pooling": False,
             "depth": 1,
             "use_custom_filters": False,
         }
@@ -747,11 +752,15 @@ class IndividualInceptionClassifier(BaseDeepClassifier):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param1 = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
-            "kernel_size": 4,
+            "depth": 1,
+            "kernel_size": 2,
+            "n_filters": 1,
+            "n_conv_per_layer": 1,
             "use_residual": False,
-            "use_bottleneck": True,
+            "use_bottleneck": False,
+            "use_max_pooling": False,
             "depth": 1,
             "use_custom_filters": False,
         }

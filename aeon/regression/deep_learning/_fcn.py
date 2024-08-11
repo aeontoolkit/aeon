@@ -328,11 +328,11 @@ class FCNRegressor(BaseDeepRegressor):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
             "use_bias": False,
             "n_layers": 1,
-            "n_filters": 5,
+            "n_filters": 4,
             "kernel_size": 3,
             "padding": "valid",
             "strides": 2,

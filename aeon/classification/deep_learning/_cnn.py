@@ -332,9 +332,12 @@ class CNNClassifier(BaseDeepClassifier):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param1 = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
-            "avg_pool_size": 4,
+            "n_layers": 1,
+            "n_filters": 1,
+            "kernel_size": 2,
+            "avg_pool_size": 2,
         }
 
         test_params = [param1]
@@ -652,9 +655,12 @@ class TimeCNNClassifier(BaseDeepClassifier):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param1 = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
-            "avg_pool_size": 4,
+            "n_layers": 1,
+            "n_filters": 1,
+            "kernel_size": 2,
+            "avg_pool_size": 2,
         }
 
         test_params = [param1]

@@ -340,7 +340,10 @@ class InceptionNetwork(BaseDeepLearningNetwork):
             )
             conv_list.append(hybrid_layer)
 
-        x = tf.keras.layers.Concatenate(axis=2)(conv_list)
+        if len(conv_list) > 1:
+            x = tf.keras.layers.Concatenate(axis=2)(conv_list)
+        else:
+            x = conv_list[0]
         x = tf.keras.layers.BatchNormalization()(x)
         x = tf.keras.layers.Activation(activation=activation)(x)
 

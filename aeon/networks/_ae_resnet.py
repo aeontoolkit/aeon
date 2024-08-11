@@ -138,36 +138,71 @@ class AEResNetNetwork(BaseDeepLearningNetwork):
         self._kernel_size_ = [8, 5, 3] if self.kernel_size is None else self.kernel_size
 
         if isinstance(self._n_filters_, list):
+            assert len(self._n_filters_) == self.n_residual_blocks, (
+                f"Number of filters {len(self._n_filters_)} should be"
+                f" the same as number of residual blocks but is"
+                f" not: {self.n_residual_blocks}."
+            )
             self._n_filters = self._n_filters_
         else:
             self._n_filters = [self._n_filters_] * self.n_residual_blocks
 
         if isinstance(self._kernel_size_, list):
+            assert len(self._kernel_size_) == self.n_conv_per_residual_block, (
+                f"Number of kernel sizes {len(self._kernel_size_)} should be"
+                f" the same as number of convolution layers per block but is"
+                f" not: {self.n_conv_per_residual_block}."
+            )
             self._kernel_size = self._kernel_size_
         else:
             self._kernel_size = [self._kernel_size_] * self.n_conv_per_residual_block
 
         if isinstance(self.strides, list):
+            assert len(self.strides) == self.n_conv_per_residual_block, (
+                f"Number of strides {len(self.strides)} should be"
+                f" the same as number of convolution layers per block but is"
+                f" not: {self.n_conv_per_residual_block}."
+            )
             self._strides = self.strides
         else:
             self._strides = [self.strides] * self.n_conv_per_residual_block
 
         if isinstance(self.dilation_rate, list):
+            assert len(self.dilation_rate) == self.n_conv_per_residual_block, (
+                f"Number of dilation rates {len(self.dilation_rate)} should be"
+                f" the same as number of convolution layers per block but is"
+                f" not: {self.n_conv_per_residual_block}."
+            )
             self._dilation_rate = self.dilation_rate
         else:
             self._dilation_rate = [self.dilation_rate] * self.n_conv_per_residual_block
 
         if isinstance(self.padding, list):
+            assert len(self.padding) == self.n_conv_per_residual_block, (
+                f"Number of paddings {len(self.padding)} should be"
+                f" the same as number of convolution layers per block but is"
+                f" not: {self.n_conv_per_residual_block}."
+            )
             self._padding = self.padding
         else:
             self._padding = [self.padding] * self.n_conv_per_residual_block
 
         if isinstance(self.activation, list):
+            assert len(self.activation) == self.n_conv_per_residual_block, (
+                f"Number of activations {len(self.activation)} should be"
+                f" the same as number of convolution layers per block but is"
+                f" not: {self.n_conv_per_residual_block}."
+            )
             self._activation = self.activation
         else:
             self._activation = [self.activation] * self.n_conv_per_residual_block
 
         if isinstance(self.use_bias, list):
+            assert len(self.use_bias) == self.n_conv_per_residual_block, (
+                f"Number of use biases {len(self.use_bias)} should be"
+                f" the same as number of convolution layers per block but is"
+                f" not: {self.n_conv_per_residual_block}."
+            )
             self._use_bias = self.use_bias
         else:
             self._use_bias = [self.use_bias] * self.n_conv_per_residual_block

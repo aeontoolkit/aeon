@@ -37,12 +37,15 @@ def test_random_state_deep_learning_cls(deep_cls):
 
         X, y = make_example_3d_numpy(random_state=random_state)
 
-        deep_cls1 = deep_cls(random_state=random_state, n_epochs=4)
+        test_params = deep_cls.get_test_params()[0]
+        test_params["random_state"] = random_state
+
+        deep_cls1 = deep_cls(**test_params)
         deep_cls1.fit(X, y)
 
         layers1 = deep_cls1.training_model_.layers[1:]
 
-        deep_cls2 = deep_cls(random_state=random_state, n_epochs=4)
+        deep_cls2 = deep_cls(**test_params)
         deep_cls2.fit(X, y)
 
         layers2 = deep_cls2.training_model_.layers[1:]

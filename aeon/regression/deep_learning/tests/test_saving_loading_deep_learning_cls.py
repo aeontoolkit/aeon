@@ -45,33 +45,33 @@ def test_saving_loading_deep_learning_rgs(deep_rgs):
 
             X, y = make_example_3d_numpy()
 
-            deep_rgs_train = deep_rgs(
-                n_epochs=2,
-                save_best_model=True,
-                save_last_model=True,
-                save_init_model=True,
-                best_file_name=best_file_name,
-                last_file_name=last_file_name,
-                init_file_name=init_file_name,
-                file_path=tmp,
-            )
+            test_params = deep_rgs.get_test_params()[0]
+            test_params["save_best_model"] = True
+            test_params["save_last_model"] = True
+            test_params["save_init_model"] = True
+            test_params["best_file_name"] = best_file_name
+            test_params["last_file_name"] = last_file_name
+            test_params["init_file_name"] = init_file_name
+            test_params["file_path"] = tmp
+
+            deep_rgs_train = deep_rgs(**test_params)
             deep_rgs_train.fit(X, y)
 
-            deep_rgs_best = deep_rgs()
+            deep_rgs_best = deep_rgs(**test_params)
             deep_rgs_best.load_model(
                 model_path=os.path.join(tmp, best_file_name + ".keras"),
             )
             ypred_best = deep_rgs_best.predict(X)
             assert len(ypred_best) == len(y)
 
-            deep_rgs_last = deep_rgs()
+            deep_rgs_last = deep_rgs(**test_params)
             deep_rgs_last.load_model(
                 model_path=os.path.join(tmp, last_file_name + ".keras"),
             )
             ypred_last = deep_rgs_last.predict(X)
             assert len(ypred_last) == len(y)
 
-            deep_rgs_init = deep_rgs()
+            deep_rgs_init = deep_rgs(**test_params)
             deep_rgs_init.load_model(
                 model_path=os.path.join(tmp, init_file_name + ".keras"),
             )

@@ -350,7 +350,7 @@ class ResNetRegressor(BaseDeepRegressor):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
             "n_residual_blocks": 1,
             "n_filters": 5,

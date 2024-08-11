@@ -328,7 +328,7 @@ class FCNClassifier(BaseDeepClassifier):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param1 = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
             "use_bias": False,
             "n_layers": 1,

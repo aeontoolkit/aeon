@@ -89,8 +89,6 @@ class EncoderNetwork(BaseDeepLearningNetwork):
         """
         import tensorflow as tf
 
-        tf.keras.config.enable_unsafe_deserialization()
-
         self._kernel_size = (
             [5, 11, 21] if self.kernel_size is None else self.kernel_size
         )
@@ -117,22 +115,7 @@ class EncoderNetwork(BaseDeepLearningNetwork):
 
             x = conv
 
-        # split attention
-
-        split_index = self._n_filters[-1] // 2
-
-        attention_multiplier_1 = tf.keras.layers.Softmax()(
-            tf.keras.layers.Lambda(lambda x: x[:, :, :split_index])(conv)
-        )
-        attention_multiplier_2 = tf.keras.layers.Lambda(
-            lambda x: x[:, :, split_index:]
-        )(conv)
-
-        # attention mechanism
-
-        attention = tf.keras.layers.Multiply()(
-            [attention_multiplier_1, attention_multiplier_2]
-        )
+        attention = tf.keras.layers.Attention()([conv, conv, conv])
 
         # add fully connected hidden layer
 

@@ -310,6 +310,8 @@ class EncoderClassifier(BaseDeepClassifier):
             "n_epochs": 8,
             "batch_size": 4,
             "use_bias": False,
+            "n_filters": [2],
+            "kernel_size": [2],
             "fc_units": 8,
             "strides": 2,
             "dropout_proba": 0,

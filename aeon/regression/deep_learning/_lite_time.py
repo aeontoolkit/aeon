@@ -262,8 +262,8 @@ class LITETimeRegressor(BaseRegressor):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param1 = {
-            "n_regressors": 1,
-            "n_epochs": 10,
+            "n_regressors": 2,
+            "n_epochs": 2,
             "batch_size": 4,
             "kernel_size": 4,
         }
@@ -571,7 +571,7 @@ class IndividualLITERegressor(BaseDeepRegressor):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param1 = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
             "kernel_size": 4,
         }

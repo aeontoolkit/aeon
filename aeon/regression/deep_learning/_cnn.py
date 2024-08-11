@@ -342,9 +342,12 @@ class CNNRegressor(BaseDeepRegressor):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
-            "avg_pool_size": 4,
+            "n_layers": 1,
+            "n_filters": 1,
+            "kernel_size": 2,
+            "avg_pool_size": 2,
         }
 
         return [param]
@@ -670,9 +673,12 @@ class TimeCNNRegressor(BaseDeepRegressor):
             `create_test_instance` uses the first (or only) dictionary in `params`.
         """
         param = {
-            "n_epochs": 10,
+            "n_epochs": 2,
             "batch_size": 4,
-            "avg_pool_size": 4,
+            "n_layers": 1,
+            "n_filters": 1,
+            "kernel_size": 2,
+            "avg_pool_size": 2,
         }
 
         return [param]

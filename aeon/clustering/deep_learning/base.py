@@ -8,6 +8,7 @@ from aeon.clustering._k_means import TimeSeriesKMeans
 from aeon.clustering._k_medoids import TimeSeriesKMedoids
 from aeon.clustering._k_shapes import TimeSeriesKShapes
 from aeon.clustering.base import BaseClusterer
+from aeon.clustering.dummy import DummyClusterer
 
 
 class BaseDeepClusterer(BaseClusterer, ABC):
@@ -17,7 +18,7 @@ class BaseDeepClusterer(BaseClusterer, ABC):
     ----------
     n_clusters : int, default=None
         Number of clusters for the deep learning model.
-    clustering_algorithm : str, {'kmeans', 'kshape', 'kmedoids'},
+    clustering_algorithm : str, {'kmeans', 'kshape', 'kmedoids', 'dummy'},
         default="kmeans"
         The clustering algorithm used in the latent space.
         Options include:
@@ -115,7 +116,11 @@ class BaseDeepClusterer(BaseClusterer, ABC):
         else:
             clustering_params_ = self.clustering_params
             # clustering_params_["n_clusters"] = self.n_clusters
-        if self.clustering_algorithm == "kmeans":
+        if self.clustering_algorithm == "dummy":
+            self.clusterer = DummyClusterer(
+                n_clusters=self.n_clusters, **clustering_params_
+            )
+        elif self.clustering_algorithm == "kmeans":
             self.clusterer = TimeSeriesKMeans(
                 n_clusters=self.n_clusters, **clustering_params_
             )
