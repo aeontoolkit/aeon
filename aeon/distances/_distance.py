@@ -42,6 +42,10 @@ from aeon.distances._lcss import (
     lcss_distance,
     lcss_pairwise_distance,
 )
+from aeon.distances._mahalanobis import (
+    mahalanobis_distance,
+    mahalanobis_pairwise_distance,
+)
 from aeon.distances._manhattan import manhattan_distance, manhattan_pairwise_distance
 from aeon.distances._minkowski import minkowski_distance, minkowski_pairwise_distance
 from aeon.distances._mpdist import mpdist
@@ -249,6 +253,8 @@ def distance(
         )
     elif metric == "sbd":
         return sbd_distance(x, y, kwargs.get("standardize", True))
+    elif metric == "mahalanobis":
+        return mahalanobis_distance(x, y, kwargs.get("m"))
     else:
         if isinstance(metric, Callable):
             return metric(x, y, **kwargs)
@@ -419,6 +425,8 @@ def pairwise_distance(
         )
     elif metric == "sbd":
         return sbd_pairwise_distance(x, y, kwargs.get("standardize", True))
+    elif metric == "mahalanobis":
+        return mahalanobis_pairwise_distance(x, y, kwargs.get("m"))
     else:
         if isinstance(metric, Callable):
             return _custom_func_pairwise(x, y, metric, **kwargs)
@@ -804,6 +812,7 @@ def get_distance_function(metric: Union[str, DistanceFunction]) -> DistanceFunct
     'manhattan'     distances.manhattan_distance
     'minkowski'     distances.minkowski_distance
     'sbd'           distances.sbd_distance
+    'mahalanobis'   distances.mahalanobis_distance
     =============== ========================================
 
     Parameters
@@ -861,6 +870,7 @@ def get_pairwise_distance_function(
     'manhattan'     distances.manhattan_pairwise_distance
     'minkowski'     distances.minkowski_pairwise_distance
     'sbd'           distances.sbd_pairwise_distance
+    'mahalanobis'   distances.mahalanobis_pairwise_distance
     =============== ========================================
 
     Parameters
@@ -1113,6 +1123,11 @@ DISTANCES = [
         "name": "sbd",
         "distance": sbd_distance,
         "pairwise_distance": sbd_pairwise_distance,
+    },
+    {
+        "name": "mahalanobis",
+        "distance": mahalanobis_distance,
+        "pairwise_distance": mahalanobis_pairwise_distance,
     },
 ]
 
