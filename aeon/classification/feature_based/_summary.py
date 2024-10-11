@@ -35,6 +35,17 @@ class SummaryClassifier(BaseClassifier):
     estimator : sklearn classifier, default=None
         An sklearn estimator to be built using the transformed data. Defaults to a
         Random Forest with 200 trees.
+    class_weight{“balanced”, “balanced_subsample”}: dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
     n_jobs : int, default=1
         The number of jobs to run in parallel for both `fit` and `predict`.
         ``-1`` means using all processors.
@@ -79,12 +90,14 @@ class SummaryClassifier(BaseClassifier):
         self,
         summary_stats="default",
         estimator=None,
+        class_weight=None,
         n_jobs=1,
         random_state=None,
     ):
         self.summary_stats = summary_stats
         self.estimator = estimator
 
+        self.class_weight = class_weight
         self.n_jobs = n_jobs
         self.random_state = random_state
 

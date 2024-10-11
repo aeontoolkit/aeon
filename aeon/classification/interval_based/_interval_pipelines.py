@@ -53,6 +53,17 @@ class RandomIntervalClassifier(BaseClassifier):
         Seed or RandomState object used for random number generation.
         If random_state is None, use the RandomState singleton used by np.random.
         If random_state is an int, use a new RandomState instance seeded with seed.
+    class_weight{“balanced”, “balanced_subsample”}: dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
     n_jobs : int, default=1
         The number of jobs to run in parallel for both `fit` and `transform` functions.
         `-1` means using all processors.
@@ -111,6 +122,7 @@ class RandomIntervalClassifier(BaseClassifier):
         features=None,
         dilation=None,
         estimator=None,
+        class_weight=None,
         n_jobs=1,
         random_state=None,
         parallel_backend=None,
@@ -122,6 +134,7 @@ class RandomIntervalClassifier(BaseClassifier):
         self.dilation = dilation
         self.estimator = estimator
         self.random_state = random_state
+        self.class_weight = class_weight
         self.n_jobs = n_jobs
         self.parallel_backend = parallel_backend
 
@@ -151,6 +164,7 @@ class RandomIntervalClassifier(BaseClassifier):
             features=self.features,
             dilation=self.dilation,
             random_state=self.random_state,
+            class_weight=self.class_weight,
             n_jobs=self._n_jobs,
             parallel_backend=self.parallel_backend,
         )
@@ -290,6 +304,17 @@ class SupervisedIntervalClassifier(BaseClassifier):
         Seed or RandomState object used for random number generation.
         If random_state is None, use the RandomState singleton used by np.random.
         If random_state is an int, use a new RandomState instance seeded with seed.
+    class_weight{“balanced”, “balanced_subsample”}: dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
     n_jobs : int, default=1
         The number of jobs to run in parallel for both `fit` and `transform` functions.
         `-1` means using all processors.
@@ -350,6 +375,7 @@ class SupervisedIntervalClassifier(BaseClassifier):
         normalise_for_search=True,
         estimator=None,
         random_state=None,
+        class_weight=None,
         n_jobs=1,
         parallel_backend=None,
     ):
@@ -361,6 +387,7 @@ class SupervisedIntervalClassifier(BaseClassifier):
         self.normalise_for_search = normalise_for_search
         self.estimator = estimator
         self.random_state = random_state
+        self.class_weight = class_weight
         self.n_jobs = n_jobs
         self.parallel_backend = parallel_backend
 
@@ -391,6 +418,7 @@ class SupervisedIntervalClassifier(BaseClassifier):
             randomised_split_point=self.randomised_split_point,
             normalise_for_search=self.normalise_for_search,
             random_state=self.random_state,
+            class_weight=self.class_weight,
             n_jobs=self.n_jobs,
             parallel_backend=self.parallel_backend,
         )

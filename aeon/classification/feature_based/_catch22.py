@@ -59,6 +59,17 @@ class Catch22Classifier(BaseClassifier):
         If `RandomState` instance, random_state is the random number generator;
         If `None`, the random number generator is the `RandomState` instance used
         by `np.random`.
+    class_weight{“balanced”, “balanced_subsample”}: dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
     n_jobs : int, default=1
         The number of jobs to run in parallel for both `fit` and `predict`.
         ``-1`` means using all processors.
@@ -128,6 +139,7 @@ class Catch22Classifier(BaseClassifier):
         use_pycatch22=False,
         estimator=None,
         random_state=None,
+        class_weight=None,
         n_jobs=1,
         parallel_backend=None,
     ):
@@ -138,6 +150,7 @@ class Catch22Classifier(BaseClassifier):
         self.use_pycatch22 = use_pycatch22
         self.estimator = estimator
         self.random_state = random_state
+        self.class_weight = class_weight
         self.n_jobs = n_jobs
         self.parallel_backend = parallel_backend
 
@@ -167,6 +180,7 @@ class Catch22Classifier(BaseClassifier):
             outlier_norm=self.outlier_norm,
             replace_nans=self.replace_nans,
             use_pycatch22=self.use_pycatch22,
+            class_weight=self.class_weight,
             n_jobs=self._n_jobs,
             parallel_backend=self.parallel_backend,
         )

@@ -34,6 +34,17 @@ class RSASTClassifier(BaseClassifier):
         the seed of the random generator
     classifier : sklearn compatible classifier, default = None
         if None, a RidgeClassifierCV(alphas=np.logspace(-3, 3, 10)) is used.
+    class_weight{“balanced”, “balanced_subsample”}: dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
     n_jobs : int, default -1
         Number of threads to use for the transform.
 
@@ -70,12 +81,14 @@ class RSASTClassifier(BaseClassifier):
         nb_inst_per_class=10,
         seed=None,
         classifier=None,
+        class_weight=None,
         n_jobs=-1,
     ):
         super().__init__()
         self.n_random_points = n_random_points
         self.len_method = len_method
         self.nb_inst_per_class = nb_inst_per_class
+        self.class_weight = class_weight
         self.n_jobs = n_jobs
         self.seed = seed
         self.classifier = classifier
@@ -101,12 +114,13 @@ class RSASTClassifier(BaseClassifier):
             self.len_method,
             self.nb_inst_per_class,
             self.seed,
+            self.class_weight,
             self.n_jobs,
         )
 
         self._classifier = _clone_estimator(
             (
-                RidgeClassifierCV(alphas=np.logspace(-3, 3, 10))
+                RidgeClassifierCV(alphas=np.logspace(-3, 3, 10), class_weight=self.class_weight)
                 if self.classifier is None
                 else self.classifier
             ),

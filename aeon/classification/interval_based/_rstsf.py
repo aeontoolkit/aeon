@@ -45,6 +45,17 @@ class RSTSF(BaseClassifier):
         Seed or RandomState object used for random number generation.
         If random_state is None, use the RandomState singleton used by np.random.
         If random_state is an int, use a new RandomState instance seeded with seed.
+    class_weight{“balanced”, “balanced_subsample”}: dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
     n_jobs : int, default=1
         The number of jobs to run in parallel for both `fit` and `predict` functions.
         `-1` means using all processors.
@@ -86,6 +97,7 @@ class RSTSF(BaseClassifier):
         min_interval_length=3,
         use_pyfftw=False,
         random_state=None,
+        class_weight=None,
         n_jobs=1,
     ):
         self.n_estimators = n_estimators
@@ -93,6 +105,7 @@ class RSTSF(BaseClassifier):
         self.min_interval_length = min_interval_length
         self.use_pyfftw = use_pyfftw
         self.random_state = random_state
+        self.class_weight = class_weight
         self.n_jobs = n_jobs
 
         super().__init__()
