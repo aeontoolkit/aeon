@@ -17,6 +17,7 @@ __all__ = [
 
 
 from aeon.anomaly_detection.base import BaseAnomalyDetector
+from aeon.anomaly_detection.whole_series.base import BaseCollectionAnomalyDetector
 from aeon.base import BaseAeonEstimator, BaseCollectionEstimator, BaseSeriesEstimator
 from aeon.classification.base import BaseClassifier
 from aeon.classification.early_classification import BaseEarlyClassifier
@@ -37,6 +38,7 @@ BASE_CLASS_REGISTER = {
     "transformer": BaseTransformer,
     # estimator types
     "anomaly-detector": BaseAnomalyDetector,
+    "collection_anomaly_detector": BaseCollectionAnomalyDetector,
     "collection-transformer": BaseCollectionTransformer,
     "classifier": BaseClassifier,
     "clusterer": BaseClusterer,

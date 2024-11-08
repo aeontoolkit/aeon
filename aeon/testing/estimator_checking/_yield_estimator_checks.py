@@ -14,6 +14,7 @@ from sklearn.exceptions import NotFittedError
 from sklearn.utils.estimator_checks import check_get_params_invariance
 
 from aeon.anomaly_detection.base import BaseAnomalyDetector
+from aeon.anomaly_detection.whole_series.base import BaseCollectionAnomalyDetector
 from aeon.base import BaseAeonEstimator
 from aeon.base._base import _clone_estimator
 from aeon.classification import BaseClassifier
@@ -33,6 +34,9 @@ from aeon.testing.estimator_checking._yield_classification_checks import (
 )
 from aeon.testing.estimator_checking._yield_clustering_checks import (
     _yield_clustering_checks,
+)
+from aeon.testing.estimator_checking._yield_collection_anomaly_detection_checks import (
+    _yield_collection_anomaly_detection_checks,
 )
 from aeon.testing.estimator_checking._yield_collection_transformation_checks import (
     _yield_collection_transformation_checks,
@@ -149,6 +153,11 @@ def _yield_all_aeon_checks(
 
     if issubclass(estimator_class, BaseAnomalyDetector):
         yield from _yield_anomaly_detection_checks(
+            estimator_class, estimator_instances, datatypes
+        )
+
+    if issubclass(estimator_class, BaseCollectionAnomalyDetector):
+        yield from _yield_collection_anomaly_detection_checks(
             estimator_class, estimator_instances, datatypes
         )
 
