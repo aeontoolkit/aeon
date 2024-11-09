@@ -39,7 +39,10 @@ def test_all_networks_functionality(network):
         if _check_soft_dependencies(
             network._config["python_dependencies"], severity="none"
         ) and _check_python_version(network._config["python_version"], severity="none"):
-            my_network = network()
+            if network.__name__ == "LSTMNetwork":
+                my_network = network(n_nodes=50, n_layers=2, prediction_horizon=1)
+            else:
+                my_network = network()
 
             if network._config["structure"] == "auto-encoder":
                 encoder, decoder = my_network.build_network(input_shape=input_shape)

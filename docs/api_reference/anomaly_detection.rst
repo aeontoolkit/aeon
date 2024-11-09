@@ -80,3 +80,4 @@ Detectors
     PyODAdapter
     STRAY
     STOMP
+    LSTM_AD
