@@ -14,9 +14,17 @@ the paper and a link to the code in your personal GitHub or other repository.
 
 ## Classification
 
-- Middlehurst, M. and Schäfer, P. and  Bagnall, A. (2024). Bake off redux: a review
+- Dempster, A., Tan, W. T., Miller, L., Foumani, N., Schmidt, D. and Webb, G  (2024).
+  Highly Scalable Time Series Classification for Very Large Datasets,  ECML/PKDD Workshop on Advanced Analytics and Learning on Temporal Data. [Paper](https://ecml-aaltd.github.io/aaltd2024/articles/Dempster_AALTD24.pdf)
+- Dempster, A., Schmidt, D. and Webb, G. (2024). QUANT: a minimalist interval method
+  for time series classification, Data Mining and Knowledge Discovery, Volume 38,
+  pages 2377–2402. [Paper](https://link.springer.com/article/10.1007/s10618-024-01036-9)
+- Serramazza, D., Nguyen, T. and Ifrim, G. (2024) Improving the Evaluation and
+  Actionability of Explanation Methods for Multivariate Time Series Classification.
+  Proc. ECML/PKDD [ArXiV](https://arxiv.org/abs/2406.12507)
+- Middlehurst, M., Schäfer, P. and  Bagnall, A. (2024). Bake off redux: a review
   and experimental evaluation of recent time series classification algorithms.
-  Data Mining and Knowledge Discovery, online first, open access.
+  Data Mining and Knowledge Discovery, Volume 38, pages 1958–2031.
   [Paper](https://link.springer.com/article/10.1007/s10618-024-01022-1) [Webpage/Code](https://tsml-eval.readthedocs.io/en/stable/publications/2023/tsc_bakeoff/tsc_bakeoff_2023.html)
 - Spinnato, F. and Guidotti, R. and Monreale, A. and Nanni, M. (2024). Fast, Interpretable,
   and Deterministic Time Series Classification With a Bag-of-Receptive-Fields.
@@ -39,6 +47,12 @@ the paper and a link to the code in your personal GitHub or other repository.
   Learning on Temporal Data (pp. 39-55).
   [Paper](https://link.springer.com/chapter/10.1007/978-3-031-49896-1_4)
 
+## Ordinal classification
+
+- Ayllón-Gavilán, R., Guijo-Rubio, D., Gutiérrez, P.A., Bagnall, A., and Hervás-Martínez, C. Convolutional and Deep Learning based techniques for Time Series Ordinal Classification.[ArXiV](https://arxiv.org/abs/2306.10084).
+- Ayllón-Gavilán, R., Guijo-Rubio, D., Gutiérrez, P. A., and Hervás-Martínez, C. (2024). O-Hydra: A Hybrid Convolutional and Dictionary-Based Approach to Time Series Ordinal Classification. In Conference of the Spanish Association for Artificial Intelligence (pp. 50-60). [Paper](https://link.springer.com/chapter/10.1007/978-3-031-62799-6_6).
+- Ayllón-Gavilán, R., Guijo-Rubio, D., Gutiérrez, P.A., and Hervás-Martínez, C. (2023). A Dictionary-Based Approach to Time Series Ordinal Classification. In: Rojas, I., Joya, G., Catala, A. (eds) Advances in Computational Intelligence. IWANN 2023. Lecture Notes in Computer Science, vol 14135. [Paper](https://link.springer.com/chapter/10.1007/978-3-031-43078-7_44).
+
 ## Regression
 
 - Guijo-Rubio, D., Middlehurst, M., Arcencio, G., Silva, D. and Bagnall, A. (2024).
@@ -51,17 +65,14 @@ the paper and a link to the code in your personal GitHub or other repository.
   (pp. 113-126).
   [Paper](https://link.springer.com/chapter/10.1007/978-3-031-49896-1_8) [Webpage/Code](https://tsml-eval.readthedocs.io/en/stable/publications/2023/rist_pipeline/rist_pipeline.html)
 
-## Ordinal classification
-
-- Ayllón-Gavilán, R., Guijo-Rubio, D., Gutiérrez, P.A., Bagnall, A., and Hervás-Martínez, C. Convolutional and Deep Learning based techniques for Time Series Ordinal Classification. [ArXiV](https://arxiv.org/abs/2306.10084).
-- Ayllón-Gavilán, R., Guijo-Rubio, D., Gutiérrez, P. A., and Hervás-Martínez, C. (2024). O-Hydra: A Hybrid Convolutional and Dictionary-Based Approach to Time Series Ordinal Classification. In Conference of the Spanish Association for Artificial Intelligence (pp. 50-60). [Paper](https://link.springer.com/chapter/10.1007/978-3-031-62799-6_6).
-- Ayllón-Gavilán, R., Guijo-Rubio, D., Gutiérrez, P.A., and Hervás-Martínez, C. (2023). A Dictionary-Based Approach to Time Series Ordinal Classification. In: Rojas, I., Joya, G., Catala, A. (eds) Advances in Computational Intelligence. IWANN 2023. Lecture Notes in Computer Science, vol 14135. [Paper](https://link.springer.com/chapter/10.1007/978-3-031-43078-7_44).
-
 ## Prototyping
 
 - Ismail-Fawaz, A. and Ismail Fawaz, H. and Petitjean, F. and Devanne, M. and Weber,
-  J. and Berretti, S. and Webb, GI. and Forestier, G. (2023 December "ShapeDBA: Generating Effective Time Series Prototypes Using ShapeDTW Barycenter Averaging." ECML/PKDD Workshop on Advanced Analytics and Learning on Temporal Data. [Paper](https://doi.org/10.1007/978-3-031-49896-1_9) [code](https://github.com/MSD-IRIMAS/ShapeDBA)
+  J. and Berretti, S. and Webb, GI. and Forestier, G. (2023) ShapeDBA: Generating
+  Effective Time Series Prototypes Using ShapeDTW Barycenter Averaging. ECML/PKDD
+  Workshop on Advanced Analytics and Learning on Temporal Data. [Paper](https://doi.org/10.1007/978-3-031-49896-1_9) [code](https://github.com/MSD-IRIMAS/ShapeDBA)
 - Holder, C., Guijo-Rubio, D., & Bagnall, A. J. (2023). Barycentre Averaging for the Move-Split-Merge Time Series Distance Measure. In Proceedings of the 15th International Joint Conference on Knowledge Discovery, Knowledge Engineering and Knowledge Management-Volume 1:, 51-62, pp. 51-62. [Paper](https://www.scitepress.org/Link.aspx?doi=10.5220/0012164900003598)
+[Paper](https://www.scitepress.org/Link.aspx?doi=10.5220/0012164900003598)
 
 ## Generation Evaluation
 

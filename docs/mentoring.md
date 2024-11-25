@@ -1,17 +1,17 @@
 
 [//]: # (Try to put references in harvard style for consistency.)
 
-# Mentoring and Projects
+# aeon projects: ongoing or potential
 
-`aeon` runs a range of short to medium duration projects interacting with the community
-and the code
+`aeon` runs a range of short to medium duration projects that involve
+developing or using aeon and interacting with the community and the code
 base. These projects are designed for internships, usage as part of
 undergraduate/postgraduate projects at academic institutions, and as options for
 programs such as [Google Summer of Code (GSoC)](https://summerofcode.withgoogle.com/).
 
 For those interested in undertaking a project outside these scenarios, we recommend
 joining the [Slack](https://join.slack.com/t/aeon-toolkit/shared_invite/zt-22vwvut29-HDpCu~7VBUozyfL_8j3dLA)
-and discussing with the project mentors. We aim to run schemes to
+and discussing with the community. We aim to run schemes to
 help new contributors to become more familiar with `aeon`, time series machine learning
 research, and open-source software development.
 
@@ -20,7 +20,7 @@ majority of them will require some knowledge of machine learning and time series
 
 ## Current aeon projects
 
-This is a list of some of the projects we are interested in running in 2024. Feel
+This is a list of some of the projects we are interested in running in 2024/25. Feel
 free to propose your own project ideas, but please discuss them with us first. We have
 an active community of researchers and students who work on `aeon`. Please get in touch
 via Slack if you are interested in any of these projects or have any questions.
@@ -33,13 +33,13 @@ to open source. We list projects by time series task
 
 [Classification](#classification)
 1. Optimizing the Shapelet Transform for classification and similarity search
-2. EEG classification with aeon-neuro (Listed for GSoC 2024)
-3. Improved Proximity Forest for classification (listed for GSoC 2024)
+2. EEG classification with aeon-neuro
+3. Implement TS-CHIEF
 4. Improved HIVE-COTE implementation.
 5. Compare distance based classification.
 
 [Forecasting](#forecasting)
-1. Machine Learning for Time Series Forecasting (listed in GSoC 2024)
+1. Machine Learning for Time Series Forecasting
 2. Deep Learning for Time Series Forecasting
 3. Implement ETS forecasters in aeon
 
@@ -48,7 +48,7 @@ to open source. We list projects by time series task
 2. Deep learning based clustering algorithms
 
 [Anomaly Detection](#anomaly-detection)
-1. Anomaly detection with the Matrix Profile and MERLIN
+1. Anomaly detection with the Matrix Profile, MERLIN and MADRID
 
 [Segmentation](#segmentation)
 1. Time series segmentation
@@ -58,7 +58,7 @@ to open source. We list projects by time series task
 2. Implement channel selection algorithms
 
 [Visualisation](#visualisation)
-1. Explainable AI with the shapelet transform (Southampton intern project).
+1. Explainable AI with the shapelet transform
 
 [Regression](#regression)
 1. Adapt forecasting regressors to time series extrinsic regression.
@@ -147,7 +147,7 @@ transform: A new approach for time series shapelets. In International Conference
 Pattern Recognition and Artificial Intelligence (pp. 653-664). Cham: Springer
 International Publishing.
 
-#### 2. EEG classification with aeon-neuro (Listed for GSoC 2024)
+#### 2. EEG classification with aeon-neuro
 
 Mentors: Tony Bagnall ({user}`TonyBagnall`) and Aiden Rushbrooke
 
@@ -193,73 +193,7 @@ Time Series Classification of Electroencephalography Data, IWANN 2023.
 2. MNE Toolkit, https://mne.tools/stable/index.html
 3. The Brain Imaging Data Structure (BIDS) standard, https://bids.neuroimaging.io/
 
-#### 3. Improved Proximity Forest for classification (listed for GSoC 2024)
-
-Mentors: Matthew Middlehurst ({user}`MatthewMiddlehurst`) and Tony Bagnall
-({user}`TonyBagnall`)
-
-##### Related Issues
-[#159](https://github.com/aeon-toolkit/aeon/issues/159)
-[#428](https://github.com/aeon-toolkit/aeon/issues/428)
-
-
-##### Description
-
-Distance-based classifiers such as k-Nearest Neighbours are popular approaches to time
-series classification. They primarily use elastic distance measures such as Dynamic Time
-Warping (DTW) to compare two series. The Proximity Forest algorithm [1] is a
-distance-based classifier for time series. The classifier creates a forest of decision
-trees, where the tree splits are based on the distance between time series using
-various distance measures. A recent review of time series classification algorithms [2]
-found that Proximity Forest was the most accurate distance-based algorithm of those
-compared.
-
-`aeon` previously had an implementation of the Proximity Forest algorithm, but it was
-not as accurate as the original implementation (the one used in the study) and was
-unstable on benchmark datasets. The goal of this project is to significantly overhaul
-the previous implementation or completely re-implement Proximity Forest in `aeon` to
-match the accuracy of the original algorithm. This will involve comparing against the
-authors' Java implementation of the algorithm as well as alternate Python versions.
-The mentors will provide results for both for alternative methods. While knowing
-Java is not a requirement for this project, it could be beneficial.
-
-Recently, the group which published the algorithm has proposed a new version of the
-Proximity Forest algorithm, Proximity Forest 2.0 [3]. This algorithm is more accurate
-than the original Proximity Forest algorithm, and does not currently have an
-implementation in `aeon` or elsewhere in Python. If time allows, the project could also
-involve implementing and evaluating the Proximity Forest 2.0 algorithm.
-
-##### Project stages
-
-1. Learn about `aeon` best practices, coding standards and testing policies.
-2. Study the Proximity Forest algorithm and previous `aeon` implementation.
-3. Improve/re-implement the Proximity Forest implementation in `aeon`, with
-the aim being to have an implementation that is as accurate as the original algorithm,
-while remaining feasible to run.
-4. Evaluate the improved implementation against the original `aeon` Proximity Forest
-and the authors' Java implementation.
-5. If time, implement the Proximity Forest 2.0 algorithm and repeat the above
-evaluation.
-
-##### Expected Outcomes
-
-We expect the mentee engage with the aeon community and produce a high quality
-implementation of the Proximity Forest algorithm(s) that gets accepted into the toolkit.
-
-##### References
-
-1. Lucas, B., Shifaz, A., Pelletier, C., O’Neill, L., Zaidi, N., Goethals,
-B., Petitjean, F. and Webb, G.I., 2019. Proximity forest: an effective and scalable
-distance-based classifier for time series. Data Mining and Knowledge Discovery, 33(3),
-pp.607-635.
-2. Middlehurst, M., Schäfer, P. and Bagnall, A., 2023. Bake off redux: a review and
-experimental evaluation of recent time series classification algorithms. arXiv preprint
-arXiv:2304.13029.
-3. Herrmann, M., Tan, C.W., Salehi, M. and Webb, G.I., 2023. Proximity Forest 2.0: A
-new effective and scalable similarity-based classifier for time series. arXiv
-preprint arXiv:2304.05800.
-
-#### 4. Improved HIVE-COTE implementation
+#### 3. Improved HIVE-COTE implementation
 
 Mentors: Matthew Middlehurst ({user}`MatthewMiddlehurst`) and Tony Bagnall
 ({user}`TonyBagnall`)
@@ -302,7 +236,7 @@ alternative structures. This can easily develop into a research project.
 experimental evaluation of recent time series classification algorithms. arXiv preprint
 arXiv:2304.13029.
 
-#### 5. Compare distance based classification and regression
+#### 4. Compare distance based classification and regression
 
 Mentors: Chris Holder ({user}`cholder`) and Tony Bagnall
 ({user}`TonyBagnall`)
@@ -327,9 +261,9 @@ datasets.
 
 ### Forecasting
 
-#### 1. Machine Learning for Time Series Forecasting (listed in GSoC 2024)
+#### 1. Machine Learning for Time Series Forecasting
 
-Mentors: Tony Bagnall ({user}`TonyBagnall`) and Matthew Middlehurst (@MatthewMiddlehurst).
+Mentors: Tony Bagnall ({user}`TonyBagnall`) and Leo Tsaprounis ({user}`ltsaprounis`) .
 
 ##### Related Issues
 [#265](https://github.com/aeon-toolkit/aeon/issues/265)
@@ -353,7 +287,7 @@ SETAR-Tree [3].
 
 ##### Expected Outcomes
 
-1. Contributions to the aeon forecasting module.
+1. Contributions to the new experimental aeon forecasting module.
 2. Implementation of a machine learning forecasting algorithms.
 3. Help write up results for a technical report/academic paper (depending on outcomes).
 
@@ -497,7 +431,7 @@ Published: 07 September 2020 Volume 34, pages 1936–1962, (2020)
 ### Anomaly detection
 
 
-#### 1. Anomaly detection with the Matrix Profile and MERLIN
+#### 1. Anomaly detection with the Matrix Profile, MERLIN and MADRID
 
 Mentors: Matthew Middlehurst ({user}`MatthewMiddlehurst`)
 
@@ -553,7 +487,7 @@ mining. Journal of Open Source Software, 4(39), p.1504.
 
 #### 1. Time series segmentation
 
-Mentors: Tony Bagnall ({user}`TonyBagnall`) and TBC
+Mentors: Tony Bagnall ({user}`TonyBagnall`)
 
 ##### Description
 
@@ -723,7 +657,7 @@ Series Classification. AALTD, ECML-PKDD, Springer, 2021
 
 ### Visualisation
 
-#### 1. Explainable AI with the shapelet transform (Southampton intern project).
+#### 1. Explainable AI with the shapelet transform.
 
 Mentors: TonyBagnall ({user}`TonyBagnall`) and David Guijo-Rubio
 ({user}`dguijo`)
@@ -741,13 +675,13 @@ source toolkits, familiarisation with the shapelet code and the development of a
 visualisation tool to help relate shapelets back to the training data. An outline
 for the project is
 
-Weeks 1-2: Familiarisation with open source, aeon and the visualisation module. Make
+1. Familiarisation with open source, aeon and the visualisation module. Make
 contribution for a good first issue.
-Weeks 3-4: Understand the shapelet transfer algorithm, engage in ongoing discussions
+2. Understand the shapelet transfer algorithm, engage in ongoing discussions
 for possible improvements, run experiments to create predictive models for a test data set
-Weeks 5-6: Design and prototype visualisation tools for shapelets, involving a range
+3. Design and prototype visualisation tools for shapelets, involving a range
 of summary measures and visualisation techniques, including plotting shapelets on training data, calculating frequency, measuring similarity between
-Weeks 7-8: Debug, document and make PRs to merge contributions into the aeon toolkit.
+4. Debug, document and make PRs to merge contributions into the aeon toolkit.
 
 [1] Bagnall, A., Lines, J., Bostrom, A., Large, J. and Keogh, E. The great time series classification bake off: a review and experimental evaluation of recent algorithmic advances. Data Mining and Knowledge Discovery, Volume 31, pages 606–660, (2017)
 [2] Ye, L., Keogh, E. Time series shapelets: a novel technique that allows accurate, interpretable and fast classification. Data Min Knowl Disc 22, 149–182 (2011). https://doi.org/10.1007/s10618-010-0179-5
