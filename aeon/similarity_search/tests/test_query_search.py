@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_array_equal
 
-from aeon.similarity_search.query_search import QuerySearch
+from aeon.similarity_search._query_search import QuerySearch
 
 DATATYPES = ["int64", "float64"]
 
