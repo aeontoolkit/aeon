@@ -18,7 +18,7 @@ from sklearn.utils import check_random_state
 
 from aeon.classification.base import BaseClassifier
 from aeon.transformations.collection import Normalizer
-from aeon.transformations.collection.dictionary_based import SAX, SFA
+from aeon.transformations.collection.dictionary_based import SAX, SFAFast
 from aeon.utils.validation._dependencies import _check_soft_dependencies
 
 
@@ -62,7 +62,7 @@ class REDCOMETS(BaseClassifier):
 
     See Also
     --------
-    SAX, SFA
+    SAX, SFA, SFAFast
 
     Notes
     -----
@@ -182,9 +182,9 @@ class REDCOMETS(BaseClassifier):
         Returns
         -------
         sfa_transforms :
-            List of ``SFA()`` instances with random word length and alpabet size
+            List of ``SFAFast()`` instances with random word length and alpabet size
         sfa_clfs :
-            List of ``(RandomForestClassifier(), weight)`` tuples fitted on `SFA`
+            List of ``(RandomForestClassifier(), weight)`` tuples fitted on `SFAFast`
             transformed training data
         sax_transforms :
             List of ``SAX()`` instances with random word length and alpabet size
@@ -241,7 +241,7 @@ class REDCOMETS(BaseClassifier):
         cv = np.min([5, len(y_smote) // len(list(set(y_smote)))])
 
         sfa_transforms = [
-            SFA(
+            SFAFast(
                 word_length=w,
                 alphabet_size=a,
                 window_size=X_smote.shape[1],
@@ -254,8 +254,9 @@ class REDCOMETS(BaseClassifier):
 
         sfa_clfs = []
         for sfa in sfa_transforms:
-            sfa_dics = sfa.fit_transform(X_smote, y_smote)
-            X_sfa = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]])
+            sfa.fit(X_smote, y_smote)
+            sfa_dics = sfa.transform_words(X_smote)
+            X_sfa = sfa_dics[:, 0, :]
 
             rf = RandomForestClassifier(
                 n_estimators=self.n_trees,
@@ -318,11 +319,11 @@ class REDCOMETS(BaseClassifier):
         Returns
         -------
         sfa_transforms : list
-            List of lists of ``SFA()`` instances with random word length and alpabet
+            List of lists of ``SFAFast()`` instances with random word length and alpabet
             size
         sfa_clfs : list
             List of lists of ``(RandomForestClassifier(), weight)`` tuples fitted on
-            `SFA` transformed training data
+            `SFAFast` transformed training data
         sax_transforms : list
             List of lists of ``SAX()`` instances with random word length and alpabet
             size
@@ -416,8 +417,8 @@ class REDCOMETS(BaseClassifier):
         pred_mat = np.zeros((X.shape[0], self.n_classes_))
 
         for sfa, (rf, weight) in zip(self.sfa_transforms, self.sfa_clfs):
-            sfa_dics = sfa.transform(X)
-            X_sfa = np.array([sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]])
+            sfa_dics = sfa.transform_words(X)
+            X_sfa = sfa_dics[:, 0, :]
 
             rf_pred_mat = rf.predict_proba(X_sfa)
 
@@ -471,10 +472,8 @@ class REDCOMETS(BaseClassifier):
             if self.variant in [6, 7, 8, 9]:
                 dimension_pred_mats = None
             for sfa, (rf, _) in zip(sfa_transforms, sfa_clfs):
-                sfa_dics = sfa.transform(X_d)
-                X_sfa = np.array(
-                    [sfa.word_list(list(d.keys())[0]) for d in sfa_dics[0]]
-                )
+                sfa_dics = sfa.transform_words(X_d)
+                X_sfa = sfa_dics[:, 0, :]
 
                 rf_pred_mat = rf.predict_proba(X_sfa)
 
