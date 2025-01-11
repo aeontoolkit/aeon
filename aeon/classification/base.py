@@ -26,6 +26,7 @@ from typing import final
 
 import numpy as np
 import pandas as pd
+from sklearn.base import ClassifierMixin
 from sklearn.metrics import get_scorer, get_scorer_names
 from sklearn.model_selection import cross_val_predict
 
@@ -35,7 +36,7 @@ from aeon.utils.validation.collection import get_n_cases
 from aeon.utils.validation.labels import check_classification_y
 
 
-class BaseClassifier(BaseCollectionEstimator):
+class BaseClassifier(ClassifierMixin, BaseCollectionEstimator):
     """
     Abstract base class for time series classifiers.
 
@@ -66,7 +67,6 @@ class BaseClassifier(BaseCollectionEstimator):
         self.classes_ = []  # classes seen in y, unique labels
         self.n_classes_ = -1  # number of unique classes in y
         self._class_dictionary = {}
-        self._estimator_type = "classifier"
 
         super().__init__()
 
