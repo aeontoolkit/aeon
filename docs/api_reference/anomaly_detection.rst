@@ -35,6 +35,7 @@ Detectors
     ROCKAD
     STOMP
     STRAY
+    IDK
 
 Base
 ----
