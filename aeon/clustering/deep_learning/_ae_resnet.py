@@ -11,8 +11,8 @@ from copy import deepcopy
 
 from sklearn.utils import check_random_state
 
+from aeon.clustering._dummy import DummyClusterer
 from aeon.clustering.deep_learning.base import BaseDeepClusterer
-from aeon.clustering.dummy import DummyClusterer
 from aeon.networks import AEResNetNetwork
 
 
