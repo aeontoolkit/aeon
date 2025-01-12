@@ -93,6 +93,15 @@ class ContractableBOSS(BaseClassifier):
     weights_ :
         Weight of each classifier in the ensemble.
 
+
+    Raises
+    ------
+    ValueError
+    Raised when `min_window` is greater than `max_window + 1`.
+    This ensures that `min_window` does not exceed `max_window`,
+    preventing invalid window size configurations.
+
+
     See Also
     --------
     BOSSEnsemble, IndividualBOSS
@@ -152,6 +161,9 @@ class ContractableBOSS(BaseClassifier):
         self.max_win_len_prop = max_win_len_prop
         self.min_window = min_window
 
+        # Calculate and initialize max_window
+        self.max_window = self.calculate_max_window()
+
         self.time_limit_in_minutes = time_limit_in_minutes
         self.contract_max_n_parameter_samples = contract_max_n_parameter_samples
         self.n_jobs = n_jobs
@@ -170,6 +182,22 @@ class ContractableBOSS(BaseClassifier):
         self._alphabet_size = 4
 
         super().__init__()
+
+    def calculate_max_window(self):
+        """Calculate max_window based on max_win_len_prop or other parameters."""
+        return int(self.max_win_len_prop * 100)
+
+    def validate_window_sizes(self):
+        """Validate if the min_window size is valid against max_window.
+
+        Raises a ValueError if min_window is greater than max_window + 1.
+        """
+        if self.min_window > self.max_window + 1:
+            raise ValueError(
+                f"Error in ContractableBOSS: min_window = {self.min_window} "
+                f"is bigger than max_window = {self.max_window}. "
+                "Please set min_window to be smaller than or equal to max_window."
+            )
 
     def _fit(self, X, y, keep_train_preds=True):
         """Fit a cBOSS ensemble on cases (X,y), where y is the target variable.
@@ -194,7 +222,11 @@ class ContractableBOSS(BaseClassifier):
         -----
         Changes state by creating a fitted model that updates attributes
         ending in "_" and sets is_fitted flag to True.
+
         """
+        # validate window sizes
+        self.validate_window_sizes()
+
         time_limit = self.time_limit_in_minutes * 60
         self.n_cases_, _, self.n_timepoints_ = X.shape
 
@@ -306,6 +338,17 @@ class ContractableBOSS(BaseClassifier):
         1D np.ndarray
             Predicted class labels shape = (n_cases).
 
+        Raises
+        ------
+        IndexError
+        If an invalid index is accessed when selecting a class from `self.classes_`
+        during prediction. This can occur if no valid indices are found for the
+        maximum probability.
+
+        ValueError
+        If the probabilities returned by `self.predict_proba(X)` do not have
+        valid values or do not match the expected shape or format.
+
         """
         rng = check_random_state(self.random_state)
         return np.array(
@@ -328,6 +371,19 @@ class ContractableBOSS(BaseClassifier):
         -------
         2D np.ndarray
             Predicted class labels shape = (n_cases).
+
+        Raises
+        ------
+        ValueError
+        If `self.n_estimators_` is 0 and the model cannot make predictions,
+        meaning no classifiers are available to compute probabilities.
+
+        IndexError
+        If the predicted class label does not exist in `self._class_dictionary`,
+        which could happen if the predicted class is not properly mapped.
+
+        KeyError
+        If a key is missing from `self._class_dictionary` during the mapping process.
         """
         sums = np.zeros((X.shape[0], self.n_classes_))
 
@@ -342,6 +398,35 @@ class ContractableBOSS(BaseClassifier):
         return sums / (np.ones(self.n_classes_) * self._weight_sum)
 
     def _fit_predict(self, X, y) -> np.ndarray:
+        """Fit the model and predict class values for n instances in X.
+
+        Parameters
+        ----------
+        X : 3D np.ndarray
+        The data to make predictions for, shape = (n_cases, n_channels,
+        n_timepoints).
+        y : 1D np.ndarray
+        True class labels, shape = (n_cases,).
+
+        Returns
+        -------
+        1D np.ndarray
+        Predicted class labels shape = (n_cases).
+
+        Raises
+        ------
+        ValueError
+        If the shapes of `X` and `y` do not match, indicating inconsistent input data.
+        Or if the model is not properly trained and cannot make predictions.
+
+        KeyError
+        If a predicted class label is not found in `self._class_dictionary`,
+        which may occur during the mapping of predicted class labels.
+
+        IndexError
+        If `subsample[n]` is out of bounds for `self.n_cases_`,
+        indicating an invalid index access during prediction.
+        """
         rng = check_random_state(self.random_state)
         return np.array(
             [
@@ -351,6 +436,40 @@ class ContractableBOSS(BaseClassifier):
         )
 
     def _fit_predict_proba(self, X, y) -> np.ndarray:
+        """Fit the model and predict class probabilities for n instances in X.
+
+        Parameters
+        ----------
+        X : 3D np.ndarray
+            The data to make predictions for, shape = (n_cases, n_channels,
+            n_timepoints).
+        y : 1D np.ndarray
+            True class labels, shape = (n_cases,).
+
+        Returns
+        -------
+        2D np.ndarray
+        Predicted class probabilities shape = (n_cases, n_classes).
+
+        Raises
+        ------
+        ValueError
+        If the shapes of `X` and `y` do not match, indicating inconsistent input data.
+        Or if the model is not properly trained and cannot make predictions.
+
+        KeyError
+        If a predicted class label is not found in `self._class_dictionary`,
+        which may occur during the mapping of predicted class labels.
+
+        IndexError
+        If `subsample[n]` is out of bounds for `self.n_cases_`,
+        indicating an invalid index access during prediction.
+
+        TypeError
+        If `self._train_predictions` is not of the expected type
+        (e.g., not a list or array) or is `None`, indicating a problem
+        with the training predictions during the fitting process.
+        """
         self._fit(X, y, keep_train_preds=True)
 
         results = np.zeros((self.n_cases_, self.n_classes_))
