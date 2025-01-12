@@ -8,8 +8,10 @@ __all__ = [
     "Catch22Clusterer",
     "SummaryClusterer",
     "TSFreshClusterer",
+    "RClusterer",
 ]
 
 from aeon.clustering.feature_based._catch22 import Catch22Clusterer
+from aeon.clustering.feature_based._r_cluster import RClusterer
 from aeon.clustering.feature_based._summary import SummaryClusterer
 from aeon.clustering.feature_based._tsfresh import TSFreshClusterer
