@@ -42,6 +42,9 @@ class TimeCNNClassifier(BaseDeepClassifier):
     strides : int or list of int, default = 1
         The strides of kernels in the convolution and max pooling layers, if not a
         list, the same strides are used for all layers.
+    strides_pooling : int or list of int, default = None
+        Strides for the pooling layers. If None, defaults to pool_size.
+        If not a list, the same strides are used for all pooling layers.
     dilation_rate : int or list of int, default = 1
         The dilation rate of the convolution layers, if not a list, the same dilation
         rate is used all over the network.
@@ -125,6 +128,7 @@ class TimeCNNClassifier(BaseDeepClassifier):
         activation="sigmoid",
         padding="valid",
         strides=1,
+        strides_pooling=None,
         dilation_rate=1,
         n_epochs=2000,
         batch_size=16,
@@ -148,6 +152,7 @@ class TimeCNNClassifier(BaseDeepClassifier):
         self.n_filters = n_filters
         self.padding = padding
         self.strides = strides
+        self.strides_pooling = strides_pooling
         self.dilation_rate = dilation_rate
         self.avg_pool_size = avg_pool_size
         self.activation = activation
@@ -182,6 +187,7 @@ class TimeCNNClassifier(BaseDeepClassifier):
             activation=self.activation,
             padding=self.padding,
             strides=self.strides,
+            strides_pooling=self.strides_pooling,
             dilation_rate=self.dilation_rate,
             use_bias=self.use_bias,
         )
