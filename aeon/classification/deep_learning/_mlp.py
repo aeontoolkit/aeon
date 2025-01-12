@@ -21,6 +21,17 @@ class MLPClassifier(BaseDeepClassifier):
 
     Parameters
     ----------
+    n_layers : int, optional (default=3)
+        The number of dense layers in the MLP.
+    n_units : Union[int, List[int]], optional (default=200)
+        Number of units in each dense layer.
+    activation : Union[str, List[str]], optional (default='relu')
+        Activation function(s) for each dense layer.
+    dropout_rate : Union[float, List[Union[int, float]]], optional (default=None)
+        Dropout rate(s) for each dense layer. If None, a default rate of 0.2 is used.
+        Dropout rate(s) are typically a number in the interval [0, 1].
+    dropout_last : float, default = 0.3
+        The dropout rate of the last layer.
     use_bias : bool, default = True
         Condition on whether or not to use bias values for dense layers.
     n_epochs : int, default = 2000
@@ -76,10 +87,6 @@ class MLPClassifier(BaseDeepClassifier):
         a single string metric is provided, it will be
         used as the only metric. If a list of metrics are
         provided, all will be used for evaluation.
-    activation : string or a tf callable, default="sigmoid"
-        Activation function used in the output linear layer.
-        List of available activation functions:
-        https://keras.io/api/layers/activations/
 
     Notes
     -----
@@ -104,6 +111,11 @@ class MLPClassifier(BaseDeepClassifier):
 
     def __init__(
         self,
+        n_layers=3,
+        n_units=200,
+        activation="relu",
+        dropout_rate=None,
+        dropout_last=None,
         use_bias=True,
         n_epochs=2000,
         batch_size=16,
@@ -120,16 +132,19 @@ class MLPClassifier(BaseDeepClassifier):
         last_file_name="last_model",
         init_file_name="init_model",
         random_state=None,
-        activation="sigmoid",
         optimizer=None,
     ):
+        self.n_layers = n_layers
+        self.n_units = n_units
+        self.activation = activation
+        self.dropout_rate = dropout_rate
+        self.dropout_last = dropout_last
         self.callbacks = callbacks
         self.n_epochs = n_epochs
         self.verbose = verbose
         self.loss = loss
         self.metrics = metrics
         self.use_mini_batch_size = use_mini_batch_size
-        self.activation = activation
         self.use_bias = use_bias
         self.file_path = file_path
         self.save_best_model = save_best_model
@@ -147,7 +162,14 @@ class MLPClassifier(BaseDeepClassifier):
             last_file_name=last_file_name,
         )
 
-        self._network = MLPNetwork(use_bias=self.use_bias)
+        self._network = MLPNetwork(
+            n_layers=self.n_layers,
+            n_units=self.n_units,
+            activation=self.activation,
+            dropout_rate=self.dropout_rate,
+            dropout_last=self.dropout_last,
+            use_bias=self.use_bias,
+        )
 
     def build_model(self, input_shape, n_classes, **kwargs):
         """Construct a compiled, un-trained, keras model that is ready for training.
