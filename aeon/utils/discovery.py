@@ -92,6 +92,7 @@ def all_estimators(
         # ignore test modules and base classes
         "base",
         "tests",
+        "similarity_search"
         # ignore these submodules
         "benchmarking",
         "datasets",

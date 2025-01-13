@@ -29,8 +29,6 @@ __all__ = [
     "MockUnivariateSeriesTransformer",
     "MockMultivariateSeriesTransformer",
     "MockSeriesTransformerNoFit",
-    # similarity search
-    "MockSimilaritySearch",
 ]
 
 from aeon.testing.mock_estimators._mock_anomaly_detectors import (
@@ -64,4 +62,3 @@ from aeon.testing.mock_estimators._mock_series_transformers import (
     MockSeriesTransformerNoFit,
     MockUnivariateSeriesTransformer,
 )
-from aeon.testing.mock_estimators._mock_similarity_search import MockSimilaritySearch

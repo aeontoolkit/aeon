@@ -87,7 +87,6 @@ Mock Estimators
     MockUnivariateSeriesTransformer
     MockMultivariateSeriesTransformer
     MockSeriesTransformerNoFit
-    MockSimilaritySearch
 
 Utilities
 ^^^^^^^^^
