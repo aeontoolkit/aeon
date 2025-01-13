@@ -43,16 +43,6 @@ class DWT_MLEAD(BaseAnomalyDetector):
     subsequently clusters the anomalies to determine the anomaly centers. This step is
     not implemented in this version.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate
-       * - Output data format
-         - anomaly scores
-       * - Learning Type
-         - unsupervised
-
     Parameters
     ----------
     start_level : int, default=3

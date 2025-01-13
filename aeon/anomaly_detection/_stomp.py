@@ -21,16 +21,6 @@ class STOMP(BaseAnomalyDetector):
 
     STOMP supports univariate time series only.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate
-       * - Output data format
-         - anomaly scores
-       * - Learning Type
-         - unsupervised
-
 
     Parameters
     ----------

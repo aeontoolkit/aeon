@@ -25,16 +25,6 @@ class KMeansAD(BaseAnomalyDetector):
     fitted on a clean reference time series and used to detect anomalies in a different
     target time series with the same number of dimensions.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate and multivariate
-       * - Output data format
-         - anomaly scores
-       * - Learning Type
-         - unsupervised or semi-superivsed
-
     Parameters
     ----------
     n_clusters : int, default=20

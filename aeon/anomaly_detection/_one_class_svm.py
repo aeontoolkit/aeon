@@ -19,16 +19,6 @@ class OneClassSVM(BaseAnomalyDetector):
     the sklearn ``OneClassSVM`` except for `window_size` and `stride`, which are used to
     construct the sliding windows.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate and multivariate
-       * - Output data format
-         - anomaly scores
-       * - Learning Type
-         - semi-supervised
-
     The documentation for parameters has been adapted from
     (https://scikit-learn.org/dev/modules/generated/sklearn.svm.OneClassSVM.html).
     Here, `X` refers to the set of sliding windows extracted from the time series
@@ -169,7 +159,6 @@ class OneClassSVM(BaseAnomalyDetector):
         self.estimator_.fit(X)
 
     def _predict(self, X) -> np.ndarray:
-
         _X, padding = sliding_windows(
             X, window_size=self.window_size, stride=self.stride, axis=0
         )
@@ -188,7 +177,6 @@ class OneClassSVM(BaseAnomalyDetector):
         return point_anomaly_scores
 
     def _inner_predict(self, X: np.ndarray, padding: int) -> np.ndarray:
-
         anomaly_scores = self.estimator_.score_samples(X)
 
         point_anomaly_scores = reverse_windowing(

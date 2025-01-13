@@ -17,20 +17,6 @@ class LOF(PyODAdapter):
     This class implement metrics-based outlier detection algorithms using the
     Local Outlier Factor (LOF) algorithm from PyOD.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate or multivariate
-       * - Output data format
-         - anomaly scores
-       * - missing_values
-         - False
-       * - Learning Type
-         - unsupervised or semi-supervised
-       * - python_dependencies
-         - ["pyod"]
-
     The documentation for parameters has been adapted from the
     [PyOD documentation](https://pyod.readthedocs.io/en/latest/pyod.models.html#id586).
     Here, `X` refers to the set of sliding windows extracted from the time series
