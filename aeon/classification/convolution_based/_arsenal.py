@@ -130,15 +130,15 @@ class Arsenal(BaseClassifier):
 
     def __init__(
         self,
-        n_kernels=2000,
-        n_estimators=25,
-        rocket_transform="rocket",
-        max_dilations_per_kernel=32,
-        n_features_per_kernel=4,
-        time_limit_in_minutes=0.0,
-        contract_max_n_estimators=100,
+        n_kernels: int = 2000,
+        n_estimators: int = 25,
+        rocket_transform: str = "rocket",
+        max_dilations_per_kernel: int = 32,
+        n_features_per_kernel: int = 4,
+        time_limit_in_minutes: float = 0.0,
+        contract_max_n_estimators: int = 100,
         class_weight=None,
-        n_jobs=1,
+        n_jobs: int = 1,
         random_state=None,
     ):
         self.n_kernels = n_kernels

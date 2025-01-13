@@ -90,12 +90,12 @@ class MultiRocketClassifier(BaseClassifier):
 
     def __init__(
         self,
-        n_kernels=10000,
-        max_dilations_per_kernel=32,
-        n_features_per_kernel=4,
+        n_kernels: int = 10000,
+        max_dilations_per_kernel: int = 32,
+        n_features_per_kernel: int = 4,
         estimator=None,
         class_weight=None,
-        n_jobs=1,
+        n_jobs: int = 1,
         random_state=None,
     ):
         self.n_kernels = n_kernels

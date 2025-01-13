@@ -93,10 +93,10 @@ class RocketClassifier(BaseClassifier):
 
     def __init__(
         self,
-        n_kernels=10000,
+        n_kernels: int = 10000,
         estimator=None,
         class_weight=None,
-        n_jobs=1,
+        n_jobs: int = 1,
         random_state=None,
     ):
         self.n_kernels = n_kernels
