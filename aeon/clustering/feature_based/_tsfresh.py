@@ -15,6 +15,7 @@ from sklearn.cluster import KMeans
 from aeon.base._base import _clone_estimator
 from aeon.clustering import BaseClusterer
 from aeon.transformations.collection.feature_based import TSFresh
+from aeon.utils.tags.enum_tags import AlgorithmType
 
 
 class TSFreshClusterer(BaseClusterer):
@@ -74,7 +75,7 @@ class TSFreshClusterer(BaseClusterer):
     _tags = {
         "capability:multivariate": True,
         "capability:multithreading": True,
-        "algorithm_type": "feature",
+        "algorithm_type": AlgorithmType.FEATURE.value,
         "python_dependencies": "tsfresh",
     }
 
