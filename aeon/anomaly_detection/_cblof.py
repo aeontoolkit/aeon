@@ -19,16 +19,6 @@ class CBLOF(PyODAdapter):
     the PyOD model ``CBLOF`` except for `window_size` and `stride`, which are used to
     construct the sliding windows.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate and multivariate
-       * - Output data format
-         - anomaly scores
-       * - Learning Type
-         - unsupervised or semi-supervised
-
     The documentation for parameters has been adapted from the
     [PyOD documentation](https://pyod.readthedocs.io/en/latest/pyod.models.html#id117).
     Here, `X` refers to the set of sliding windows extracted from the time series

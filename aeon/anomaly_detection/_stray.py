@@ -23,16 +23,6 @@ class STRAY(BaseAnomalyDetector):
     HDoutliers that uses extreme value theory for the anomolous threshold
     calculation, to deal with data streams that exhibit non-stationary behavior.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate and multivariate
-       * - Output data format
-         - binary classification
-       * - Learning Type
-         - unsupervised
-
     Parameters
     ----------
     alpha : float, default=0.01

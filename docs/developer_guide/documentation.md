@@ -187,6 +187,21 @@ pip install --editable .[docs]
 cd docs
 ```
 
+> **Note:** If you are using Linux or MacOS, you'll have to install [**Pandoc**](https://pandoc.org/) as a dependency. Install it using the following command:
+>
+> If you're using any Debian based system, you can use the following command to install Pandoc:
+> ```bash
+> sudo apt install pandoc
+> ```
+>
+> If you're using MacOS, you can use the following command to install Pandoc:
+> ```bash
+> brew install pandoc
+> ```
+>
+> For all other operating systems, please checkout the [Pandoc installation guide](https://pandoc.org/installing.html).
+>
+
 3. To build the website locally, run:
 
 ```powershell

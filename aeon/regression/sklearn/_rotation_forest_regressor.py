@@ -352,7 +352,7 @@ class RotationForestRegressor(RegressorMixin, BaseEstimator):
 
         return tree, pcas, groups, X_t if save_transformed_data else None
 
-    def _predict_for_estimator(self, X, clf: int, pcas: type[PCA], groups):
+    def _predict_for_estimator(self, X, clf: int, pcas: PCA, groups):
         X_t = np.concatenate(
             [pcas[i].transform(X[:, group]) for i, group in enumerate(groups)], axis=1
         )

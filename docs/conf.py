@@ -389,7 +389,7 @@ def _make_estimator_overview(app):
 
             # For case where tag is not included output as not supported.
             if not _val or _val is None:
-                data[f"Supports {_str}"].append("\u274C")
+                data[f"Supports {_str}"].append("\u274c")
             else:
                 data[f"Supports {_str}"].append("\u2705")
 
@@ -401,6 +401,103 @@ def _make_estimator_overview(app):
         file.write(df_str)
 
 
+def _add_estimator_capabilities_table(app, pagename, templatename, context, doctree):
+    """Add estimator capabilities table to HTML page."""
+    if "title" not in context or "body" not in context:
+        return
+
+    if '<span class="caption-text">Capabilities</span>' in context["body"]:
+        return
+
+    from aeon.utils.discovery import all_estimators
+
+    estimators = all_estimators(include_sklearn=False)
+
+    for estimator_name, estimator_class in estimators:
+        if estimator_name == context["title"]:
+            tags = estimator_class.get_class_tags()
+
+            capabilities = {
+                key.split(":")[1]: value
+                for key, value in tags.items()
+                if key.startswith("capability:")
+            }
+
+            html_output = """
+            <div class="table-wrapper docutils container" id="id3">
+            <table class="docutils align-default" id="id3">
+            <caption>
+            <span class="caption-text">Capabilities</span>
+            <a class="headerlink" href="#id3" title="Link to this table">¶</a>
+            </caption>
+            <tbody>
+            """
+
+            for idx, (key, value) in enumerate(capabilities.items()):
+                row_class = "row-odd" if idx % 2 == 0 else "row-even"
+                formatted_key = key.replace("_", " ").title()
+                if value is True:
+                    formatted_value = "Yes"
+                elif value is False:
+                    formatted_value = "No"
+                elif value is None:
+                    formatted_value = "Not Set"
+                else:
+                    formatted_value = str(value)
+
+                html_output += f"""
+            <tr class="{row_class}">
+                <th class="stub"><p>{formatted_key}</p></th>
+                <td><p>{formatted_value}</p></td>
+            </tr>
+            """
+
+            html_output += """
+            </tbody>
+            </table>
+            </div>
+            """
+
+            html_content = context["body"]
+
+            # Function to insert table into HTML content
+            # Look for existing NOTES section outside methods
+            start_methods = html_content.find('<dl class="py method">')
+            section_before_methods = html_content[:start_methods]
+
+            # Look for Notes section
+            notes_heading = '<p class="rubric">Notes</p>'
+            notes_pos = section_before_methods.find(notes_heading)
+
+            if notes_pos != -1:
+                # Notes exists, insert table after it
+                insert_pos = notes_pos + len(notes_heading)
+                context["body"] = (
+                    html_content[:insert_pos]
+                    + "\n"
+                    + html_output
+                    + html_content[insert_pos:]
+                )
+            else:
+                # Need to create Notes section
+                # Find position before References or Examples or Methods
+                # whichever comes first
+                ref_pos = section_before_methods.find(
+                    '<p class="rubric">References</p>'
+                )
+                ex_pos = section_before_methods.find('<p class="rubric">Examples</p>')
+
+                positions = [
+                    pos for pos in [ref_pos, ex_pos, start_methods] if pos != -1
+                ]
+                insert_pos = min(positions) if positions else start_methods
+
+                new_section = f'\n<p class="rubric">Notes</p>\n{html_output}\n'
+                context["body"] = (
+                    html_content[:insert_pos] + new_section + html_content[insert_pos:]
+                )
+
+
 def setup(app):
     """Set up sphinx builder.
 
@@ -409,6 +506,7 @@ def setup(app):
     app : Sphinx application object
     """
     app.connect("builder-inited", _make_estimator_overview)
+    app.connect("html-page-context", _add_estimator_capabilities_table)
 
 
 # -- Extension configuration -------------------------------------------------

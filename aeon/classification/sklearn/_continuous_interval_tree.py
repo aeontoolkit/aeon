@@ -483,7 +483,7 @@ class ContinuousIntervalTree(ClassifierMixin, BaseEstimator):
 
         return splits, gains
 
-    def _find_splits_gain(self, node: type[_TreeNode], splits: list, gains: list):
+    def _find_splits_gain(self, node: _TreeNode, splits: list, gains: list):
         """Recursively find the split and information gain for each tree node."""
         splits.append(node.best_split)
         gains.append(node.best_gain)

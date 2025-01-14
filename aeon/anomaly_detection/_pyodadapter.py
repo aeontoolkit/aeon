@@ -45,16 +45,6 @@ class PyODAdapter(BaseAnomalyDetector):
     For unsupervised anomaly detection, use `fit_predict` directly on the target time
     series.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate and multivariate
-       * - Output data format
-         - anomaly scores
-       * - Learning Type
-         - unsupervised or semi-supervised
-
 
     Parameters
     ----------

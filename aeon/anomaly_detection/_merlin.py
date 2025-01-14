@@ -21,16 +21,6 @@ class MERLIN(BaseAnomalyDetector):
     most anomalous subsequence in a time series [1]_. The algorithm is based on the
     Euclidean distance between subsequences of the time series.
 
-    .. list-table:: Capabilities
-       :stub-columns: 1
-
-       * - Input data format
-         - univariate
-       * - Output data format
-         - binary classification
-       * - Learning Type
-         - unsupervised
-
     Parameters
     ----------
     min_length : int, default=5
