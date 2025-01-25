@@ -14,6 +14,7 @@ __all__ = [
     "PyODAdapter",
     "STOMP",
     "STRAY",
+    "MADRID"
 ]
 
 from aeon.anomaly_detection._cblof import CBLOF
@@ -29,3 +30,4 @@ from aeon.anomaly_detection._pyodadapter import PyODAdapter
 from aeon.anomaly_detection._rockad import ROCKAD
 from aeon.anomaly_detection._stomp import STOMP
 from aeon.anomaly_detection._stray import STRAY
+from aeon.anomaly_detection._madrid import MADRID
