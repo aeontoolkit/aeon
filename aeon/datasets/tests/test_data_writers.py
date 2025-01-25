@@ -58,7 +58,7 @@ def test_write_regression_to_ts_file_equal_length(problem_name):
     """
     X, y = make_example_3d_numpy(regression_target=True)
     with tempfile.TemporaryDirectory() as tmp:
-        write_to_ts_file(X=X, path=tmp, y=y, problem_name=problem_name)
+        write_to_ts_file(X=X, path=tmp, y=y, problem_name=problem_name + ".ts")
         load_path = os.path.join(tmp, problem_name)
         newX, newy = load_from_ts_file(full_file_path_and_name=load_path)
         assert isinstance(newX, np.ndarray)
@@ -66,6 +66,7 @@ def test_write_regression_to_ts_file_equal_length(problem_name):
         assert X[0][0][0] == newX[0][0][0]
         y = y.astype(str)
         assert np.array_equal(y, newy)
+        write_to_ts_file(X=X, path=tmp, y=None, problem_name=problem_name + ".ts")
 
 
 @pytest.mark.skipif(

@@ -28,3 +28,4 @@ ignore:
   - "aeon/testing/expected_results/results_reproduction/"
   - "docs/"
   - "examples/"
+  - "datasets/_data_loaders.py"
