@@ -55,6 +55,8 @@ def get_identifier(estimator):
         identifiers.remove("collection-estimator")
     if len(identifiers) > 1 and "transformer" in identifiers:
         identifiers.remove("transformer")
+    if len(identifiers) > 1 and "similarity-search" in identifiers:
+        identifiers.remove("similarity-search")
 
     if len(identifiers) > 1:
         TypeError(

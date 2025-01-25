@@ -8,7 +8,9 @@ __all__ = [
     "first_order_differences_3d",
     "z_normalise_series_with_mean",
     "z_normalise_series",
+    "z_normalise_series_with_mean_std",
     "z_normalise_series_2d",
+    "z_normalise_series_2d_with_mean_std",
     "z_normalise_series_3d",
     "set_numba_random_seed",
     "choice_log",
@@ -20,6 +22,7 @@ __all__ = [
     "slope_derivative_2d",
     "slope_derivative_3d",
     "generate_combinations",
+    "get_all_subsequences",
 ]
 
 
@@ -273,7 +276,7 @@ def z_normalise_series_2d_with_mean_std(
 
     Parameters
     ----------
-    X : array, shape = (n_channels, n_timestamps)
+    X : array, shape = (n_channels, n_timepoints)
         Input array to normalise.
     mean : array, shape = (n_channels)
         Mean of each channel of X.
@@ -282,7 +285,7 @@ def z_normalise_series_2d_with_mean_std(
 
     Returns
     -------
-    arr : array, shape = (n_channels, n_timestamps)
+    arr : array, shape = (n_channels, n_timepoints)
         The normalised array
     """
     arr = np.zeros(X.shape)
@@ -376,10 +379,10 @@ def get_subsequence(
 
     Parameters
     ----------
-    X : array, shape (n_channels, n_timestamps)
+    X : array, shape (n_channels, n_timepoints)
         Input time series.
     i_start : int
-        A starting index between [0, n_timestamps - (length-1)*dilation]
+        A starting index between [0, n_timepoints - (length-1)*dilation]
     length : int
         Length parameter of the subsequence.
     dilation : int
@@ -408,10 +411,10 @@ def get_subsequence_with_mean_std(
 
     Parameters
     ----------
-    X : array, shape (n_channels, n_timestamps)
+    X : array, shape (n_channels, n_timepoints)
         Input time series.
     i_start : int
-        A starting index between [0, n_timestamps - (length-1)*dilation]
+        A starting index between [0, n_timepoints - (length-1)*dilation]
     length : int
         Length parameter of the subsequence.
     dilation : int
@@ -451,15 +454,56 @@ def get_subsequence_with_mean_std(
     return values, means, stds
 
 
+@njit(cache=True, fastmath=True, parallel=True)
+def compute_mean_stds_collection_parallel(X):
+    """
+    Return the mean and standard deviation for each channel of all series in X.
+
+    Parameters
+    ----------
+    X : array, shape (n_cases, n_channels, n_timepoints)
+        A time series collection
+
+    Returns
+    -------
+    means : array, shape (n_cases, n_channels)
+        The mean of each channel of each time series in X.
+    stds : array, shape (n_cases, n_channels)
+        The std of each channel of each time series in X.
+
+    """
+    n_channels = X[0].shape[0]
+    n_cases = len(X)
+    means = np.zeros((n_cases, n_channels))
+    stds = np.zeros((n_cases, n_channels))
+    for i_x in prange(n_cases):
+        n_timepoints = X[i_x].shape[1]
+        _s = np.zeros(n_channels)
+        _s2 = np.zeros(n_channels)
+        for i_t in range(n_timepoints):
+            for i_c in range(n_channels):
+                _s += X[i_x][i_c, i_t]
+                _s2 += X[i_x][i_c, i_t] ** 2
+
+        for i_c in range(n_channels):
+            means[i_x, i_c] = _s / n_timepoints
+            _std = _s2 / n_timepoints - means[i_x, i_c] ** 2
+            if _s > AEON_NUMBA_STD_THRESHOLD:
+                stds[i_x, i_c] = _std**0.5
+
+    return means, stds
+
+
 @njit(fastmath=True, cache=True)
 def sliding_mean_std_one_series(
     X: np.ndarray, length: int, dilation: int
 ) -> tuple[np.ndarray, np.ndarray]:
-    """Return the mean and standard deviation for all subsequence (l,d) in X.
+    """
+    Return the mean and standard deviation for all subsequence (l,d) in X.
 
     Parameters
     ----------
-    X : array, shape (n_channels, n_timestamps)
+    X : array, shape (n_channels, n_timepoints)
         An input time series
     length : int
         Length of the subsequence
@@ -468,14 +512,14 @@ def sliding_mean_std_one_series(
 
     Returns
     -------
-    mean : array, shape (n_channels, n_timestamps - (length-1) * dilation)
+    mean : array, shape (n_channels, n_timepoints - (length-1) * dilation)
         The mean of each subsequence with parameter length and dilation in X.
-    std : array, shape (n_channels, n_timestamps - (length-1) * dilation)
+    std : array, shape (n_channels, n_timepoints - (length-1) * dilation)
         The standard deviation of each subsequence with parameter length and dilation
         in X.
     """
-    n_channels, n_timestamps = X.shape
-    n_subs = n_timestamps - (length - 1) * dilation
+    n_channels, n_timepoints = X.shape
+    n_subs = n_timepoints - (length - 1) * dilation
     if n_subs <= 0:
         raise ValueError(
             "Invalid input parameter for sliding mean and std computations"
@@ -493,7 +537,7 @@ def sliding_mean_std_one_series(
         _sum2 = np.zeros(n_channels)
 
         # Initialize first subsequence if it is valid
-        if np.all(_idx_sub < n_timestamps):
+        if np.all(_idx_sub < n_timepoints):
             for i_length in prange(length):
                 _idx_sub[i_length] = (i_length * dilation) + i_mod_dil
                 for i_channel in prange(n_channels):
@@ -510,7 +554,7 @@ def sliding_mean_std_one_series(
 
         _idx_sub += dilation
         # As long as subsequences further subsequences are valid
-        while np.all(_idx_sub < n_timestamps):
+        while np.all(_idx_sub < n_timepoints):
             # Update sums and mean stds arrays
             for i_channel in prange(n_channels):
                 _v_new = X[i_channel, _idx_sub[-1]]
@@ -534,17 +578,17 @@ def normalise_subsequences(X_subs: np.ndarray, X_means: np.ndarray, X_stds: np.n
 
     Parameters
     ----------
-    X_subs : array, shape (n_timestamps-(length-1)*dilation, n_channels, length)
-        The subsequences of an input time series of size  n_timestamps given the
+    X_subs : array, shape (n_timepoints-(length-1)*dilation, n_channels, length)
+        The subsequences of an input time series of size  n_timepoints given the
         length and dilation parameter.
-    X_means : array, shape (n_channels, n_timestamps-(length-1)*dilation)
+    X_means : array, shape (n_channels, n_timepoints-(length-1)*dilation)
         Mean of the subsequences to normalise.
-    X_stds : array, shape (n_channels, n_timestamps-(length-1)*dilation)
+    X_stds : array, shape (n_channels, n_timepoints-(length-1)*dilation)
         Stds of the subsequences to normalise.
 
     Returns
     -------
-    array, shape = (n_timestamps-(length-1)*dilation, n_channels, length)
+    array, shape = (n_timepoints-(length-1)*dilation, n_channels, length)
         Z-normalised subsequences.
     """
     n_subsequences, n_channels, length = X_subs.shape
@@ -755,8 +799,8 @@ def get_all_subsequences(X: np.ndarray, length: int, dilation: int) -> np.ndarra
 
     Parameters
     ----------
-    X : array, shape = (n_channels, n_timestamps)
-        An input time series as (n_channels, n_timestamps).
+    X : array, shape = (n_channels, n_timepoints)
+        An input time series as (n_channels, n_timepoints).
     length : int
         Length of the subsequences to generate.
     dilation : int
@@ -764,11 +808,11 @@ def get_all_subsequences(X: np.ndarray, length: int, dilation: int) -> np.ndarra
 
     Returns
     -------
-    array, shape = (n_timestamps-(length-1)*dilation, n_channels, length)
+    array, shape = (n_timepoints-(length-1)*dilation, n_channels, length)
         The view of the subsequences of the input time series.
     """
-    n_features, n_timestamps = X.shape
+    n_features, n_timepoints = X.shape
     s0, s1 = X.strides
-    out_shape = (n_timestamps - (length - 1) * dilation, n_features, np.int64(length))
+    out_shape = (n_timepoints - (length - 1) * dilation, n_features, np.int64(length))
     strides = (s1, s0, s1 * dilation)
     return np.lib.stride_tricks.as_strided(X, shape=out_shape, strides=strides)

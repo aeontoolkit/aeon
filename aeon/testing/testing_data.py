@@ -10,7 +10,8 @@ from aeon.clustering import BaseClusterer
 from aeon.forecasting import BaseForecaster
 from aeon.regression import BaseRegressor
 from aeon.segmentation import BaseSegmenter
-from aeon.similarity_search import BaseSimilaritySearch
+from aeon.similarity_search.collection import BaseCollectionSimilaritySearch
+from aeon.similarity_search.series import BaseSeriesSimilaritySearch
 from aeon.testing.data_generation import (
     make_example_1d_numpy,
     make_example_2d_dataframe_collection,
@@ -219,7 +220,7 @@ EQUAL_LENGTH_UNIVARIATE_REGRESSION = {
     },
 }
 
-EQUAL_LENGTH_UNIVARIATE_SIMILARITY_SEARCH = {
+EQUAL_LENGTH_UNIVARIATE_COLLETION_SIMILARITY_SEARCH = {
     "numpy3D": {
         "train": (
             make_example_3d_numpy(
@@ -401,7 +402,7 @@ EQUAL_LENGTH_MULTIVARIATE_REGRESSION = {
     },
 }
 
-EQUAL_LENGTH_MULTIVARIATE_SIMILARITY_SEARCH = {
+EQUAL_LENGTH_MULTIVARIATE_COLLETION_SIMILARITY_SEARCH = {
     "numpy3D": {
         "train": (
             make_example_3d_numpy(
@@ -553,7 +554,7 @@ UNEQUAL_LENGTH_UNIVARIATE_REGRESSION = {
     },
 }
 
-UNEQUAL_LENGTH_UNIVARIATE_SIMILARITY_SEARCH = {
+UNEQUAL_LENGTH_UNIVARIATE_COLLETION_SIMILARITY_SEARCH = {
     "np-list": {
         "train": (
             make_example_3d_numpy_list(
@@ -685,30 +686,6 @@ UNEQUAL_LENGTH_MULTIVARIATE_REGRESSION = {
     },
 }
 
-UNEQUAL_LENGTH_MULTIVARIATE_SIMILARITY_SEARCH = {
-    "np-list": {
-        "train": (
-            make_example_3d_numpy_list(
-                n_cases=10,
-                n_channels=2,
-                min_n_timepoints=10,
-                max_n_timepoints=20,
-                random_state=data_rng.randint(np.iinfo(np.int32).max),
-                return_y=False,
-            ),
-            None,
-        ),
-        "test": (
-            make_example_2d_numpy_series(
-                n_timepoints=10,
-                n_channels=2,
-                random_state=data_rng.randint(np.iinfo(np.int32).max),
-            ),
-            None,
-        ),
-    },
-}
-
 X_classification_missing_train, y_classification_missing_train = make_example_3d_numpy(
     n_cases=10,
     n_channels=1,
@@ -828,7 +805,7 @@ FULL_TEST_DATA_DICT.update(
 FULL_TEST_DATA_DICT.update(
     {
         f"EqualLengthUnivariate-SimilaritySearch-{k}": v
-        for k, v in EQUAL_LENGTH_UNIVARIATE_SIMILARITY_SEARCH.items()
+        for k, v in EQUAL_LENGTH_UNIVARIATE_COLLETION_SIMILARITY_SEARCH.items()
     }
 )
 FULL_TEST_DATA_DICT.update(
@@ -846,7 +823,7 @@ FULL_TEST_DATA_DICT.update(
 FULL_TEST_DATA_DICT.update(
     {
         f"EqualLengthMultivariate-SimilaritySearch-{k}": v
-        for k, v in EQUAL_LENGTH_MULTIVARIATE_SIMILARITY_SEARCH.items()
+        for k, v in EQUAL_LENGTH_MULTIVARIATE_COLLETION_SIMILARITY_SEARCH.items()
     }
 )
 FULL_TEST_DATA_DICT.update(
@@ -863,8 +840,8 @@ FULL_TEST_DATA_DICT.update(
 )
 FULL_TEST_DATA_DICT.update(
     {
-        f"UnequalLengthUnivariate-SimilaritySearch-{k}": v
-        for k, v in UNEQUAL_LENGTH_UNIVARIATE_SIMILARITY_SEARCH.items()
+        f"UnequalLengthUnivariate-CollectionSimilaritySearch-{k}": v
+        for k, v in UNEQUAL_LENGTH_UNIVARIATE_COLLETION_SIMILARITY_SEARCH.items()
     }
 )
 FULL_TEST_DATA_DICT.update(
@@ -877,12 +854,6 @@ FULL_TEST_DATA_DICT.update(
     {
         f"UnequalLengthMultivariate-Regression-{k}": v
         for k, v in UNEQUAL_LENGTH_MULTIVARIATE_REGRESSION.items()
-    }
-)
-FULL_TEST_DATA_DICT.update(
-    {
-        f"UnequalLengthMultivariate-SimilaritySearch-{k}": v
-        for k, v in UNEQUAL_LENGTH_MULTIVARIATE_SIMILARITY_SEARCH.items()
     }
 )
 FULL_TEST_DATA_DICT.update(
@@ -1017,14 +988,15 @@ def _get_task_for_estimator(estimator):
     # collection data with continuous target labels
     elif isinstance(estimator, BaseRegressor):
         data_label = "Regression"
-    elif isinstance(estimator, BaseSimilaritySearch):
-        data_label = "SimilaritySearch"
+    elif isinstance(estimator, BaseCollectionSimilaritySearch):
+        data_label = "CollectionSimilaritySearch"
     # series data with no secondary input
     elif (
         isinstance(estimator, BaseAnomalyDetector)
         or isinstance(estimator, BaseSegmenter)
         or isinstance(estimator, BaseSeriesTransformer)
         or isinstance(estimator, BaseForecaster)
+        or isinstance(estimator, BaseSeriesSimilaritySearch)
     ):
         data_label = "None"
     else:
