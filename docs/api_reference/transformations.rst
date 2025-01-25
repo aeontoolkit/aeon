@@ -126,6 +126,17 @@ Interval based
     SupervisedIntervals
     QUANTTransformer
 
+Self Supervised
+~~~~~~~~~~~~~~~
+
+.. currentmodule:: aeon.transformations.collection.self_supervised
+
+.. autosummary::
+    :toctree: auto_generated/
+    :template: class.rst
+
+    TRILITE
+
 Shapelet based
 ~~~~~~~~~~~~~~
 
