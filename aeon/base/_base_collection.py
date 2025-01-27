@@ -44,8 +44,28 @@ class BaseCollectionEstimator(BaseAeonEstimator):
 
     @abstractmethod
     def __init__(self):
+        """
+        Initialize the BaseCollectionEstimator.
+
+        Attributes
+        ----------
+        metadata_ : dict
+            Stores metadata about the input data characteristics seen during fitting.
+            Contains keys like:
+            - 'multivariate': whether data has multiple channels
+            - 'missing_values': presence of missing values
+            - 'unequal_length': whether time series have varying lengths
+            - 'n_cases': number of time series instances
+            - 'n_channels': number of data channels
+            - 'n_timepoints': number of timepoints (None if unequal length)
+
+        _n_jobs : int, default=1
+            Number of parallel jobs to run. Used for multithreading capabilities
+            when 'capability:multithreading' tag is True.
+
+        """
         self.metadata_ = {}  # metadata/properties of data seen in fit
-        self._n_jobs = 1
+        self._n_jobs = 1  # default set to 1
 
         super().__init__()
 
@@ -100,15 +120,15 @@ class BaseCollectionEstimator(BaseAeonEstimator):
             self.metadata_ = meta
 
         X = self._convert_X(X)
-        # This usage of n_jobs is legacy, see issue #102
         multithread = self.get_tag("capability:multithreading")
         if multithread:
-            if hasattr(self, "n_jobs"):
-                self._n_jobs = check_n_jobs(self.n_jobs)
-            else:
-                raise AttributeError(
-                    "self.n_jobs must be set if capability:multithreading is True"
-                )
+            # Standardize n_jobs handling
+            self._n_jobs = getattr(
+                self, "n_jobs", 1
+            )  # check if n_jobs is defined in child class
+            self._n_jobs = check_n_jobs(self._n_jobs)
+        else:
+            self._n_jobs = 1
         return X
 
     def _check_X(self, X):

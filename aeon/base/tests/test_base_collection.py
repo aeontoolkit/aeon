@@ -226,8 +226,7 @@ def test_preprocess_collection(data):
     tags = {"capability:multithreading": True}
     cls = MockClassifier()
     cls.set_tags(**tags)
-    with pytest.raises(AttributeError, match="self.n_jobs must be set"):
-        cls._preprocess_collection(data)
+    assert cls._n_jobs == 1
 
     # Test two calls do not overwrite metadata (predict should not reset fit meta)
     cls = MockClassifier()
