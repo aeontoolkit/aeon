@@ -46,12 +46,12 @@ classifiers = [
 requires-python = ">=3.9,<3.13"
 dependencies = [
     "deprecated>=1.2.13",
-    "numba>=0.55,<0.61.0",
+    "numba>=0.55,<0.62.0",
     "numpy>=1.21.0,<2.1.0",
     "packaging>=20.0",
     "pandas>=2.0.0,<2.3.0",
-    "scikit-learn>=1.0.0,<1.6.0",
-    "scipy>=1.9.0,<1.15.0",
+    "scikit-learn>=1.0.0,<1.7.0",
+    "scipy>=1.9.0,<1.16.0",
     "typing-extensions>=4.6.0",
 ]
 
