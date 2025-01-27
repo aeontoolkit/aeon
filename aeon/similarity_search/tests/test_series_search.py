@@ -6,7 +6,7 @@ __maintainer__ = ["baraline"]
 import numpy as np
 import pytest
 
-from aeon.similarity_search.series_search import SeriesSearch
+from aeon.similarity_search._series_search import SeriesSearch
 
 DATATYPES = ["int64", "float64"]
 K_VALUES = [1, 3]

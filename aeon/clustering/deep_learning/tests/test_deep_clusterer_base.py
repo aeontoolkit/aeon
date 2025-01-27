@@ -5,7 +5,7 @@ import tempfile
 import numpy as np
 import pytest
 
-from aeon.clustering.dummy import DummyClusterer
+from aeon.clustering._dummy import DummyClusterer
 from aeon.testing.data_generation import make_example_2d_numpy_collection
 from aeon.testing.mock_estimators import MockDeepClusterer
 from aeon.utils.validation._dependencies import _check_soft_dependencies

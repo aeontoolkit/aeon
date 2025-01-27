@@ -5,5 +5,5 @@ __all__ = [
     "DummyClassifier",
 ]
 
+from aeon.classification._dummy import DummyClassifier
 from aeon.classification.base import BaseClassifier
-from aeon.classification.dummy import DummyClassifier
