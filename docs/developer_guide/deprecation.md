@@ -24,6 +24,7 @@ experimental. Currently experimental modules are:
 - `segmentation`
 - `similarity_search`
 - `visualisation`
+- `transformations.collection.imbalance`
 
 When we introduce a new module, we may classify it as experimental until the API is
 stable. We will try to not make drastic changes to experimental modules, but we need
