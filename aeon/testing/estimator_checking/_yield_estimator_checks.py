@@ -605,6 +605,28 @@ def check_raises_not_fitted_error(estimator, datatype):
                 _run_estimator_method(estimator, method, datatype, "test")
 
 
+def _compare_outputs(output1, output2):
+    if type(output1) is not type(output2):
+        return False
+    if isinstance(output1, np.ndarray):
+        return np.allclose(output1, output2)
+    if isinstance(output1, dict):
+        if output1.keys() != output2.keys():
+            return False
+        for k in output1.keys():
+            if not _compare_outputs(output1[k], output2[k]):
+                return False
+        return True
+    if isinstance(output1, tuple):
+        if len(output1) != len(output2):
+            return False
+        for i in range(len(output1)):
+            if not _compare_outputs(output1[i], output2[i]):
+                return False
+        return True
+    return False
+
+
 def check_persistence_via_pickle(estimator, datatype):
     """Check that we can pickle all estimators."""
     estimator = _clone_estimator(estimator, random_state=0)
@@ -635,10 +657,7 @@ def check_persistence_via_pickle(estimator, datatype):
 
 
 def check_fit_deterministic(estimator, datatype):
-    """Test that fit is deterministic.
-
-    Check that calling fit twice is equivalent to calling it once.
-    """
+    """Check that calling fit twice is equivalent to calling it once."""
     estimator = _clone_estimator(estimator, random_state=0)
     _run_estimator_method(estimator, "fit", datatype, "train")
 
@@ -648,17 +667,17 @@ def check_fit_deterministic(estimator, datatype):
             output = _run_estimator_method(estimator, method, datatype, "test")
             results.append(output)
 
-    # run fit and other methods a second time
+    # run fit a second time
     _run_estimator_method(estimator, "fit", datatype, "train")
 
+    # check output of predict/transform etc does not change
     i = 0
     for method in NON_STATE_CHANGING_METHODS_ARRAYLIKE:
         if hasattr(estimator, method) and callable(getattr(estimator, method)):
             output = _run_estimator_method(estimator, method, datatype, "test")
-            assert_array_almost_equal(
-                output,
-                results[i],
-                err_msg=f"Running {method} after fit twice with test "
-                f"parameters gives different results.",
-            )
+            if not _compare_outputs(output, results[i]):
+                raise ValueError(
+                    f"Running {method} after fit twice with test "
+                    f"parameters gives different results."
+                )
             i += 1
