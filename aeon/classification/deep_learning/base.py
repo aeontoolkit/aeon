@@ -1,6 +1,23 @@
 """
 Abstract base class for the Keras neural network classifiers.
 
+    class name: BaseDeepClassifier
+
+Defining methods:
+    fitting         - fit(self, X, y)
+    predicting      - predict(self, X)
+                    - predict_proba(self, X)
+    model building - build_model(self, input_shape, n_classes) (abstract method)
+
+Inherited inspection methods:
+    hyper-parameter inspection  - get_params()
+    fitted parameter inspection - get_fitted_params()
+
+State:
+    fitted model/strategy   - by convention, any attributes ending in "_"
+    fitted state flag       - is_fitted (property)
+    fitted state inspection - check_is_fitted()
+
 The reason for this class between BaseClassifier and deep_learning classifiers is
 because we can generalise tags, _predict and _predict_proba
 """

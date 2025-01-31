@@ -1,4 +1,24 @@
-"""Base class for estimators that fit collections of time series."""
+"""
+Base class for estimators that fit collections of time series.
+
+    class name: BaseCollectionEstimator
+
+Defining methods:
+    preprocessing         - _preprocess_collection(self, X, store_metadata=True)
+    input checking        - _check_X(self, X)
+    input conversion      - _convert_X(self, X)
+    shape checking        - _check_shape(self, X)
+
+Inherited inspection methods:
+    hyper-parameter inspection  - get_params()
+    fitted parameter inspection - get_fitted_params()
+
+State:
+    fitted model/strategy   - by convention, any attributes ending in "_"
+    fitted state flag       - is_fitted (property)
+    fitted state inspection - check_is_fitted()
+
+"""
 
 from abc import abstractmethod
 
