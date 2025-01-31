@@ -93,6 +93,13 @@ class ContractableBOSS(BaseClassifier):
     weights_ :
         Weight of each classifier in the ensemble.
 
+    Raises
+    ------
+    ValueError
+        Raised when ``min_window`` is greater than ``max_window + 1``.
+        This ensures that ``min_window`` does not exceed ``max_window``,
+        preventing invalid window size configurations.
+
     See Also
     --------
     BOSSEnsemble, IndividualBOSS
@@ -305,7 +312,6 @@ class ContractableBOSS(BaseClassifier):
         -------
         1D np.ndarray
             Predicted class labels shape = (n_cases).
-
         """
         rng = check_random_state(self.random_state)
         return np.array(
