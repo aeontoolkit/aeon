@@ -19,6 +19,7 @@ from aeon.distances import (
     twe_distance,
     wddtw_distance,
     wdtw_distance,
+    swale_distance,
 )
 
 distances = [
@@ -32,6 +33,7 @@ distances = [
     "ddtw",
     "wddtw",
     "twe",
+    "swale",
 ]
 
 distance_parameters = {
@@ -44,6 +46,7 @@ distance_parameters = {
     "ddtw": [0.0, 0.1, 1.0],  # window
     "twe": [0.0, 0.1, 1.0],  # window
     "msm": [0.0, 0.2, 3.0],  # parameter c
+    "swale": [1, 1, 1],
 }
 unit_test_distances = {
     "euclidean": 619.7959,
@@ -58,6 +61,7 @@ unit_test_distances = {
     "twe": [4536.0, 3192.0220, 3030.036000000001],
     "msm_ind": [1515.0, 1517.8000000000004, 1557.0],  # msm with independent distance
     "msm_dep": [1897.0, 1898.6000000000001, 1921.0],  # msm with dependent distance
+    "swale": [2.0, 15.0, 129.0, 12.0, 114.0],
 }
 basic_motions_distances = {
     "euclidean": 27.51835240,
@@ -172,4 +176,8 @@ def test_univariate_correctness():
             cases1[1], cases2[1], c=distance_parameters["msm"][j], independent=False
         )
         assert_almost_equal(d, unit_test_distances["msm_dep"][j], 4)
+        assert d == d2
+        d = swale_distance(cases1[0], cases2[0], c=distance_parameters["swale"][j])
+        d2 = swale_distance(cases1[1], cases2[1], c=distance_parameters["swale"][j])
+        assert_almost_equal(d, unit_test_distances["msm_ind"][j], 4)
         assert d == d2
