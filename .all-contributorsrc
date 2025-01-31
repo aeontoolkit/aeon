@@ -1,4 +1,14 @@
 {
+  "login": "iaadarsh23",
+  "name": "Adarsh Triapthi",
+
+  "profile": "https://github.com/iaadarsh23",
+  "contributions": [
+    "code",
+    "doc"
+  ]
+}
+{
   "projectName": "aeon",
   "projectOwner": "aeon-toolkit",
   "repoType": "github",
