@@ -14,6 +14,9 @@ __all__ = [
     "range_pr_auc_score",
     "range_pr_vus_score",
     "range_roc_vus_score",
+    "ts_precision",
+    "ts_recall",
+    "ts_fscore",
 ]
 
 from aeon.benchmarking.metrics.anomaly_detection._binary import (
@@ -34,4 +37,9 @@ from aeon.benchmarking.metrics.anomaly_detection._vus_metrics import (
     range_pr_vus_score,
     range_roc_auc_score,
     range_roc_vus_score,
+)
+from aeon.benchmarking.metrics.anomaly_detection.range_metrics import (
+    ts_fscore,
+    ts_precision,
+    ts_recall,
 )
