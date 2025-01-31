@@ -12,6 +12,7 @@ from sklearn.cluster import KMeans
 from aeon.base._base import _clone_estimator
 from aeon.clustering import BaseClusterer
 from aeon.transformations.collection.feature_based import SevenNumberSummary
+from aeon.utils.tags.enum_tags import AlgorithmType
 
 
 class SummaryClusterer(BaseClusterer):
@@ -64,7 +65,7 @@ class SummaryClusterer(BaseClusterer):
     _tags = {
         "capability:multivariate": True,
         "capability:multithreading": True,
-        "algorithm_type": "feature",
+        "algorithm_type": AlgorithmType.FEATURE.value,
     }
 
     def __init__(

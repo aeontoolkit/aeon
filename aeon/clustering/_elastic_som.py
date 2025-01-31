@@ -6,6 +6,7 @@ from sklearn.utils.random import check_random_state
 
 from aeon.clustering.base import BaseClusterer
 from aeon.distances import get_alignment_path_function, pairwise_distance
+from aeon.utils.tags.enum_tags import AlgorithmType
 
 VALID_ELASTIC_SOM_METRICS = [
     "dtw",
@@ -148,7 +149,7 @@ class ElasticSOM(BaseClusterer):
 
     _tags = {
         "capability:multivariate": True,
-        "algorithm_type": "distance",
+        "algorithm_type": AlgorithmType.DISTANCE.value,
     }
 
     def __init__(
