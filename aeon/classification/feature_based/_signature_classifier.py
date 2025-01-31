@@ -61,6 +61,17 @@ class SignatureClassifier(BaseClassifier):
         Signature truncation depth.
     random_state : int, default=None
         If `int`, random_state is the seed used by the random number generator;
+    class_weight{“balanced”, “balanced_subsample”}, dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
 
     Attributes
     ----------
@@ -105,6 +116,7 @@ class SignatureClassifier(BaseClassifier):
         sig_tfm="signature",
         depth=4,
         random_state=None,
+        class_weight=None,
     ):
         self.estimator = estimator
         self.augmentation_list = augmentation_list
@@ -116,7 +128,7 @@ class SignatureClassifier(BaseClassifier):
         self.sig_tfm = sig_tfm
         self.depth = depth
         self.random_state = random_state
-
+        self.class_weight = class_weight
         super().__init__()
 
         self.signature_method = SignatureTransformer(
@@ -135,7 +147,9 @@ class SignatureClassifier(BaseClassifier):
         """Set up the full signature method pipeline."""
         # Use rf if no classifier is set
         if self.estimator is None:
-            classifier = RandomForestClassifier(random_state=self.random_state)
+            classifier = RandomForestClassifier(
+                random_state=self.random_state, class_weight=self.class_weight
+            )
         else:
             classifier = _clone_estimator(self.estimator, self.random_state)
 

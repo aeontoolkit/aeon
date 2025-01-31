@@ -46,6 +46,17 @@ class TSFreshClassifier(BaseClassifier):
         If `RandomState` instance, random_state is the random number generator;
         If `None`, the random number generator is the `RandomState` instance used
         by `np.random`.
+    class_weight{“balanced”, “balanced_subsample”}, dict or list of dicts, default=None
+        From sklearn documentation:
+        If not given, all classes are supposed to have weight one.
+        The “balanced” mode uses the values of y to automatically adjust weights
+        inversely proportional to class frequencies in the input data as
+        n_samples / (n_classes * np.bincount(y))
+        The “balanced_subsample” mode is the same as “balanced” except that weights
+        are computed based on the bootstrap sample for every tree grown.
+        For multi-output, the weights of each column of y will be multiplied.
+        Note that these weights will be multiplied with sample_weight (passed through
+        the fit method) if sample_weight is specified.
 
     Attributes
     ----------
@@ -86,6 +97,7 @@ class TSFreshClassifier(BaseClassifier):
         n_jobs=1,
         chunksize=None,
         random_state=None,
+        class_weight=None,
     ):
         self.default_fc_parameters = default_fc_parameters
         self.relevant_feature_extractor = relevant_feature_extractor
@@ -99,6 +111,7 @@ class TSFreshClassifier(BaseClassifier):
         self._transformer = None
         self._return_majority_class = False
         self._majority_class = 0
+        self.class_weight = class_weight
 
         super().__init__()
 
@@ -137,7 +150,7 @@ class TSFreshClassifier(BaseClassifier):
         )
         self.estimator_ = _clone_estimator(
             (
-                RandomForestClassifier(n_estimators=200)
+                RandomForestClassifier(n_estimators=200, class_weight=self.class_weight)
                 if self.estimator is None
                 else self.estimator
             ),
