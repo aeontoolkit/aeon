@@ -7,11 +7,12 @@ from abc import abstractmethod
 from typing import final
 
 import numpy as np
+from sklearn.base import ClusterMixin
 
 from aeon.base import BaseCollectionEstimator
 
 
-class BaseClusterer(BaseCollectionEstimator):
+class BaseClusterer(ClusterMixin, BaseCollectionEstimator):
     """Abstract base class for time series clusterers.
 
     Parameters
@@ -26,10 +27,6 @@ class BaseClusterer(BaseCollectionEstimator):
 
     @abstractmethod
     def __init__(self):
-        # required for compatibility with some sklearn interfaces e.g.
-        # CalibratedClassifierCV
-        self._estimator_type = "clusterer"
-
         super().__init__()
 
     @final
@@ -123,24 +120,6 @@ class BaseClusterer(BaseCollectionEstimator):
         """Compute cluster centers and predict cluster index for each time series.
 
         Convenience method; equivalent of calling fit(X) followed by predict(X)
-
-        Parameters
-        ----------
-        X : np.ndarray (2d or 3d array of shape (n_cases, n_timepoints) or shape
-            (n_cases, n_channels, n_timepoints)).
-            Time series instances to train clusterer and then have indexes each belong
-            to return.
-        y: ignored, exists for API consistency reasons.
-
-        Returns
-        -------
-        np.ndarray (1d array of shape (n_cases,))
-            Index of the cluster each time series in X belongs to.
-        """
-        return self._fit_predict(X, y)
-
-    def _fit_predict(self, X, y=None) -> np.ndarray:
-        """Fit predict using base methods.
 
         Parameters
         ----------

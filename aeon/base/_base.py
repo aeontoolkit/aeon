@@ -415,6 +415,18 @@ class BaseAeonEstimator(BaseEstimator, ABC):
         """Check fitted status and return a Boolean value."""
         return self.is_fitted
 
+    def __sklearn_tags__(self):
+        """Return sklearn style tags for the estimator."""
+        aeon_tags = self.get_tags()
+        sklearn_tags = super().__sklearn_tags__()
+        sklearn_tags.non_deterministic = aeon_tags.get("non_deterministic", False)
+        sklearn_tags.target_tags.one_d_labels = True
+        sklearn_tags.input_tags.three_d_array = True
+        sklearn_tags.input_tags.allow_nan = aeon_tags.get(
+            "capability:missing_values", False
+        )
+        return sklearn_tags
+
     def _validate_data(self, **kwargs):
         """Sklearn data validation."""
         raise NotImplementedError(
